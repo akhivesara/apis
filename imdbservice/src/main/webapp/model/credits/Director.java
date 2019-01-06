@@ -2,8 +2,6 @@ package main.webapp.model.credits;
 
 import java.util.HashMap;
 
-//data model?
-// inherit base class?
 public class Director extends APersonCategory {
 
 

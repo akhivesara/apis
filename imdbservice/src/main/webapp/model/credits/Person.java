@@ -4,8 +4,6 @@ import main.webapp.ImDBBaseEntity;
 
 import java.util.HashMap;
 
-//data model?
-// inherit base class?
 public class Person implements ImDBBaseEntity {
 
     public Person(String id, String name) {

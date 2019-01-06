@@ -5,8 +5,6 @@ import main.webapp.ImDBBaseEntity;
 
 import java.util.HashMap;
 
-//data model?
-// inherit base class?
 public class Actress extends APersonCategory implements ImDBBaseEntity {
 
     public Actress(String id) {

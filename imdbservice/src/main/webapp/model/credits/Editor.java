@@ -4,8 +4,6 @@ import main.webapp.ImDBBaseEntity;
 
 import java.util.HashMap;
 
-//data model?
-// inherit base class?
 public class Editor extends APersonCategory implements ImDBBaseEntity {
 
     public Editor(String id) {

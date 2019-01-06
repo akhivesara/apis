@@ -5,12 +5,6 @@ import main.webapp.ImDBBaseEntity;
 import java.io.Serializable;
 import java.util.HashMap;
 
-//data model?
-// inherit base class?
-
-//new String[]{"id", "title", "region", "language",},
-//new String[]{"tconst", "titleType", "primaryTitle", "originalTitle", "isAdult"}
-
 public class Title implements ImDBBaseEntity {
 
 
