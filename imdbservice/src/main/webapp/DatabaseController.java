@@ -275,6 +275,51 @@ public class DatabaseController {
         return null;
     }
 
+
+    public Title retrieveTitleById(String id) {
+        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
+        //return db.retrieveTitleById(id);
+        return (Title)db.retrieveFromTableById(id, new TitleDBValuator());
+    }
+
+    public Person retrievePersonById(String id) {
+        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
+        return (Person)db.retrieveFromTableById(id, new PersonDBValuator());
+    }
+
+    public Rating retrieveRatingById(String id) {
+        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
+        return (Rating)db.retrieveFromTableById(id, new RatingDBValuator());
+    }
+
+    public ArrayList<ImDBBaseEntity> retrieveAdultTitles() {
+        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
+        String whereClause = "WHERE isAdult"+"='"+1+"'";
+        return db.retrieveListOfTitles(whereClause, new TitleDBValuator());
+
+//        return db.retrieveAdultTitles();
+    }
+
+    public ArrayList<ImDBBaseEntity> retrieveListOfTitlesByType(String type) {
+        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
+        String whereClause = "WHERE "+ "titleType"+"='"+type+"'";
+        return db.retrieveListOfTitles(whereClause, new TitleDBValuator());
+    }
+
+    public ArrayList<HashMap> retrieveListOfTitlesByGenre(String type) {
+        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
+        String whereClause = "WHERE "+ "genre"+"='"+type+"'";
+        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, new GenreDBValuator());
+        ArrayList<HashMap> returnList = new ArrayList<>(lists.size());
+        for (int i=0; i < lists.size() ; i++) {
+            HashMap value = new HashMap(2);
+            Title title = (Title)lists.get(i);
+            value.put("id",title.getId());
+            returnList.add(value);
+        }
+        return returnList;
+    }
+
     /*
     OLD CODE
 

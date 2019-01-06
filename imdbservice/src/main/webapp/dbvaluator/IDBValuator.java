@@ -3,6 +3,8 @@ package main.webapp.dbvaluator;
 import main.webapp.ImDBBaseEntity;
 
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,10 @@ public abstract class IDBValuator {
      * @return
      */
     abstract public ArrayList valuesPerEntity(ImDBBaseEntity entity);
+
+    public ImDBBaseEntity imdbEntityPerResultSet(ResultSet rs) throws SQLException {
+        return null;
+    };
 
     public String getDuplicateUpdateColumnString() {
         return null;
@@ -43,6 +49,13 @@ public abstract class IDBValuator {
                 throw new Exception("mismatch for type and columns");
         }
     }
+
+    public final void validateRetrieveInputs() throws Exception {
+        if (getDBTable() == null) throw new Exception("getDBTable missing");
+        if (getColumnForPrimaryWhereClauseById() == null) throw new Exception("WHERE ID missing");
+    }
+
+
     // Cannot be overridden
     public final ArrayList<ArrayList> execute(ImDBBaseEntity entity) throws Exception {
         validator();
@@ -57,6 +70,16 @@ public abstract class IDBValuator {
             }
         }
         return returnVal;
+    }
+
+    public final ImDBBaseEntity retrieve(ResultSet rs) throws Exception {
+        //validateRetrieveInputs();
+        return imdbEntityPerResultSet(rs);
+    }
+
+
+    public String getColumnForPrimaryWhereClauseById() {
+        return null;
     }
 
 }

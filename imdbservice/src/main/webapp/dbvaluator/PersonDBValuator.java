@@ -1,9 +1,12 @@
 package main.webapp.dbvaluator;
 
 import main.webapp.ImDBBaseEntity;
+import main.webapp.model.Title;
 import main.webapp.model.credits.Person;
 import main.webapp.util.ImdbUtils;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,5 +51,17 @@ public class PersonDBValuator extends IDBValuator {
         return v;
     }
 
+    @Override
+    public String getColumnForPrimaryWhereClauseById() {
+        return "nconst";
+    }
+
+    @Override
+    public Person imdbEntityPerResultSet(ResultSet rs) throws SQLException {
+        String nconst = rs.getString("nconst");
+        String primaryName = rs.getString("primaryName");
+        return new Person(nconst, primaryName);
+
+    }
 }
 

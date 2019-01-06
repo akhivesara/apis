@@ -4,6 +4,8 @@ import main.webapp.ImDBBaseEntity;
 import main.webapp.model.Rating;
 import main.webapp.util.ImdbUtils;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,6 +49,20 @@ public class RatingDBValuator extends IDBValuator {
         v.add(rating.getTotalVotes());
         v.add(rating.getAverageRating());
         return v;
+    }
+
+    @Override
+    public ImDBBaseEntity imdbEntityPerResultSet(ResultSet rs) throws SQLException {
+        String tconst = rs.getString("tconst");
+        Double rating = rs.getDouble("averageRating");
+        Integer votes = rs.getInt("numVotes");
+        return new Rating(tconst, rating, votes);
+
+    }
+
+    @Override
+    public String getColumnForPrimaryWhereClauseById() {
+        return "tconst";
     }
 }
 

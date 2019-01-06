@@ -4,7 +4,6 @@ import main.webapp.dbvaluator.IDBValuator;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -644,5 +643,68 @@ public class MySQLStore {
     }
 
     */
+
+    public ImDBBaseEntity retrieveFromTableById(String id, IDBValuator dbValuator) {
+        //kldfl;asd
+        Connection connection = null;
+        ResultSet rs = null;
+        try {
+            connection = DriverManager.getConnection(url, user, pwd);
+
+            dbValuator.validateRetrieveInputs();
+            // our SQL SELECT query.
+            // if you only need a few columns, specify them by name instead of using "*"
+            String sql = "SELECT * FROM " + dbValuator.getDBTable() + " WHERE "+ dbValuator.getColumnForPrimaryWhereClauseById()+"='"+id+"'";
+
+            // create the java statement
+            Statement st = connection.createStatement();
+
+            // execute the query, and get a java resultset
+            rs = st.executeQuery(sql);
+
+            // iterate through the java resultset
+            if (rs.next()) {
+                return dbValuator.retrieve(rs);
+            }
+            st.close();
+
+        } catch (Exception e) {
+            System.out.println("retrieveTitleById ex "+e);
+            System.out.println("retrieveTitleById result set "+rs);
+        }
+        return null;
+    }
+
+    public ArrayList<ImDBBaseEntity> retrieveListOfTitles(String whereClause, IDBValuator dbValuator) {
+        Connection connection = null;
+        ResultSet rs = null;
+        try {
+            connection = DriverManager.getConnection(url, user, pwd);
+
+            //dbValuator.validateRetrieveInputs();
+            String sql = "SELECT * FROM " + dbValuator.getDBTable() + " " + whereClause;
+
+            // create the java statement
+            Statement st = connection.createStatement();
+
+            // execute the query, and get a java resultset
+            rs = st.executeQuery(sql);
+
+            // iterate through the java resultset
+            ArrayList<ImDBBaseEntity> l = new ArrayList<>(0);
+
+            while (rs.next()) {
+                ImDBBaseEntity title = dbValuator.retrieve(rs);
+                l.add(title);
+            }
+            st.close();
+            return l;
+
+        } catch (Exception e) {
+            System.out.println("retrieveTitleById ex "+e);
+            System.out.println("retrieveTitleById result set "+rs);
+        }
+        return null;
+    }
 
 }

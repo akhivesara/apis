@@ -5,6 +5,8 @@ import main.webapp.model.Rating;
 import main.webapp.model.Title;
 import main.webapp.util.ImdbUtils;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,6 +55,13 @@ public class GenreDBValuator extends IDBValuator {
             p.add(c);
         }
         return p;
+    }
+
+    @Override
+    public ImDBBaseEntity imdbEntityPerResultSet(ResultSet rs) throws SQLException {
+        String tconst = rs.getString("tconst");
+        String genre = rs.getString("genre");
+        return new Title(tconst, genre);
     }
 }
 

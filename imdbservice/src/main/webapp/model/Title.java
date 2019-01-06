@@ -2,6 +2,7 @@ package main.webapp.model;
 
 import main.webapp.ImDBBaseEntity;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 //data model?
@@ -12,6 +13,11 @@ import java.util.HashMap;
 
 public class Title implements ImDBBaseEntity {
 
+
+    public Title(String id, String genres) {
+        this.id = id;
+        this.genres = genres;
+    }
 
     public String getId() {
         return id;
@@ -49,6 +55,8 @@ public class Title implements ImDBBaseEntity {
         this.runtimeMinutes = runtimeMinutes;
         this.isAdult = isAdult;
     }
+
+    public Title(){}
 
     public String getGenres() {
         return genres;

@@ -8,6 +8,12 @@ import java.util.HashMap;
 // inherit base class?
 public class Rating implements ImDBBaseEntity {
 
+    public Rating(String titleId, double averageRating, int totalVotes) {
+        this.titleId = titleId;
+        this.averageRating = averageRating;
+        this.totalVotes = totalVotes;
+    }
+
     public String getTitleId() {
         return titleId;
     }

@@ -8,6 +8,11 @@ import java.util.HashMap;
 // inherit base class?
 public class Person implements ImDBBaseEntity {
 
+    public Person(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public String getId() {
         return id;
     }
