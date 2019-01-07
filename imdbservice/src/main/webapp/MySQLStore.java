@@ -62,7 +62,7 @@ public class MySQLStore {
                 }
 
                 // Get Values
-                ArrayList<ArrayList> containerValues = valuator.execute(dbBaseEntity);
+                ArrayList<ArrayList> containerValues = valuator.populate(dbBaseEntity);
                 for (int p = 0; p < containerValues.size(); p++) {
                     ArrayList entityValues = containerValues.get(p);
                     for (int v = 0; v < entityValues.size(); v++) {
@@ -98,21 +98,9 @@ public class MySQLStore {
                 }
             }
             ps.executeBatch(); // insert remaining records
-            ps.close();
-            connection.close();
             System.out.println(" Done-- executeBatchInsert");
         } catch(Exception e){
-            try {
-                System.out.println("Pseudo Insert Exception: ex " +e);
-                if (ps != null) {
-                    ps.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            }catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            System.out.println("Pseudo Insert Exception: ex " +e);
             if (e instanceof BatchUpdateException) {
                 System.out.println("BatchUpdateException: PS " +ps);
                 System.out.println("BatchUpdateException: ex " +e);
@@ -121,6 +109,17 @@ public class MySQLStore {
             }
             if (entityIndex > 0 && dbBaseEntities != null && (entityIndex + 1) < dbBaseEntities.size()) {
                 executeBatchInsert(dbBaseEntities, entityIndex + 1, valuator);
+            }
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            }catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
     }
@@ -659,7 +658,7 @@ public class MySQLStore {
             // create the java statement
             Statement st = connection.createStatement();
 
-            // execute the query, and get a java resultset
+            // populate the query, and get a java resultset
             rs = st.executeQuery(sql);
 
             // iterate through the java resultset
@@ -687,7 +686,7 @@ public class MySQLStore {
             // create the java statement
             Statement st = connection.createStatement();
 
-            // execute the query, and get a java resultset
+            // populate the query, and get a java resultset
             rs = st.executeQuery(sql);
 
             // iterate through the java resultset

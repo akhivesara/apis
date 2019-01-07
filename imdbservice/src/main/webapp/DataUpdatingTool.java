@@ -2,11 +2,15 @@ package main.webapp;
 
 public class DataUpdatingTool {
     public static void main(String[] args) throws Exception {
-        String dbUrl = args[0];
-        String user = args[1];
-        String pwd = args[2];
+        // package as a jar with dependencies
 
-        MySQLStore db = MySQLStore.getInstance(dbUrl, user, pwd);
-        //db.testInsert(args[3] + "", "Title Name " + args[3]);
+        // maven plugin to package jar with dependency copied
+
+        // manifest by pointing the main class
+//        String dbUrl = args[0];
+//        String user = args[1];
+//        String pwd = args[2];
+
+        IMDBService.getInstance().fetchAndSaveRatings();
     }
 }

@@ -6,16 +6,13 @@ import main.webapp.model.Rating;
 import main.webapp.model.Title;
 import main.webapp.model.credits.Person;
 import main.webapp.util.ImdbUtils;
-import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 
-import javax.json.Json;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,24 +35,23 @@ public class Service {
         switch (result.getFile()) {
             case "title":
                 //TODO Multiple files
-
-                DatabaseController.getInstance().fetchAndSaveTitles();
+                IMDBService.getInstance().fetchAndSaveTitles();
                 break;
             case "person":
-                DatabaseController.getInstance().fetchAndSavePersons();
+                IMDBService.getInstance().fetchAndSavePersons();
                 break;
             case "episode":
-                DatabaseController.getInstance().fetchAndSaveEpisodes();
+                IMDBService.getInstance().fetchAndSaveEpisodes();
                 break;
             case "director":
-                DatabaseController.getInstance().fetchAndSaveDirector();
+                IMDBService.getInstance().fetchAndSaveDirector();
                 break;
             case "writer":
-                DatabaseController.getInstance().fetchAndSaveWriter();
+                IMDBService.getInstance().fetchAndSaveWriter();
                 break;
 
             case "cast":
-                DatabaseController.getInstance().fetchAndSaveCast();
+                IMDBService.getInstance().fetchAndSaveCast();
                 break;
             case "rating":
 
@@ -64,16 +60,16 @@ public class Service {
                 2. save file
                 3. populate db
                  */
-                DatabaseController.getInstance().fetchAndSaveRatings();
+                IMDBService.getInstance().fetchAndSaveRatings();
                 break;
             case "genre":
                 // Multiple files
-                DatabaseController.getInstance().fetchAndSaveGenres();
+                IMDBService.getInstance().fetchAndSaveGenres();
                 break;
             // TODO: skip as director and writer has this covered
             // CAST DISABLE
 //            case "crew":
-//                DatabaseController.getInstance().fetchAndSaveCrew();
+//                IMDBService.getInstance().fetchAndSaveCrew();
 //                break;
         }
 //        if ("rating".equalsIgnoreCase(result.getFile())) {
@@ -148,7 +144,7 @@ public class Service {
     @Produces(MediaType.APPLICATION_JSON)
     public Response titleDetails(@QueryParam("id") String input) {
         //Logger.getLogger().info();
-        Title title = (Title)DatabaseController.getInstance().retrieveTitleById(input);
+        Title title = (Title) IMDBService.getInstance().retrieveTitleById(input);
         String employeeJsonString = new Gson().toJson(title);
         return Response.ok(employeeJsonString,MediaType.APPLICATION_JSON_TYPE).build();
     }
@@ -158,7 +154,7 @@ public class Service {
     @Produces(MediaType.APPLICATION_JSON)
     public Response personDetails(@QueryParam("id") String input) {
         //Logger.getLogger().info();
-        Person title = (Person) DatabaseController.getInstance().retrievePersonById(input);
+        Person title = (Person) IMDBService.getInstance().retrievePersonById(input);
         String employeeJsonString = new Gson().toJson(title);
         return Response.ok(employeeJsonString,MediaType.APPLICATION_JSON_TYPE).build();
     }
@@ -168,7 +164,7 @@ public class Service {
     @Produces(MediaType.APPLICATION_JSON)
     public Response ratingDetails(@QueryParam("id") String input) {
         //Logger.getLogger().info();
-        Rating title = (Rating) DatabaseController.getInstance().retrieveRatingById(input);
+        Rating title = (Rating) IMDBService.getInstance().retrieveRatingById(input);
         String employeeJsonString = new Gson().toJson(title);
         return Response.ok(employeeJsonString,MediaType.APPLICATION_JSON_TYPE).build();
     }
@@ -178,7 +174,7 @@ public class Service {
     @Produces(MediaType.APPLICATION_JSON)
     public Response adult() {
         //Logger.getLogger().info();
-        ArrayList<ImDBBaseEntity> titles = DatabaseController.getInstance().retrieveAdultTitles();
+        ArrayList<ImDBBaseEntity> titles = IMDBService.getInstance().retrieveAdultTitles();
         HashMap attributes;
         attributes = new HashMap<String, Object>();
         attributes.put("adult", true);
@@ -201,7 +197,7 @@ public class Service {
     //videoGame
     public Response titlesByType(@QueryParam("type") String input) {
         //Logger.getLogger().info();
-        ArrayList<ImDBBaseEntity> titles = DatabaseController.getInstance().retrieveListOfTitlesByType(input);
+        ArrayList<ImDBBaseEntity> titles = IMDBService.getInstance().retrieveListOfTitlesByType(input);
         HashMap attributes;
         attributes = new HashMap<String, Object>();
         attributes.put("type", input);
@@ -243,7 +239,7 @@ public class Service {
     @Produces(MediaType.APPLICATION_JSON)
     public Response titlesByGenre(@QueryParam("genre") String input) {
         //Logger.getLogger().info();
-        ArrayList<HashMap> titles = DatabaseController.getInstance().retrieveListOfTitlesByGenre(input);
+        ArrayList<HashMap> titles = IMDBService.getInstance().retrieveListOfTitlesByGenre(input);
         HashMap attributes;
         attributes = new HashMap<String, Object>();
         attributes.put("genre", input);
