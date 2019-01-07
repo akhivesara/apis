@@ -52,7 +52,7 @@ public class MySQLStore {
             connection = DriverManager.getConnection(url, user, pwd);
             ps = connection.prepareStatement(sql);
 
-            for (entityIndex = startIndex ; entityIndex < dbBaseEntities.size() * .1; entityIndex++) {
+            for (entityIndex = startIndex; entityIndex < dbBaseEntities.size(); entityIndex++) {
 
                 dbBaseEntity = dbBaseEntities.get(entityIndex);
 
@@ -674,6 +674,46 @@ public class MySQLStore {
         return null;
     }
 
+    public ArrayList<ImDBBaseEntity> retrieveListOfTitles(String whereClause, IDBValuator dbValuator, Integer limit, Integer offset) {
+        Connection connection = null;
+        ResultSet rs = null;
+        try {
+            connection = DriverManager.getConnection(url, user, pwd);
+
+            //dbValuator.validateRetrieveInputs();
+            String sql = "SELECT * FROM " + dbValuator.getDBTable() + " " + whereClause;
+
+            if (limit != null) {
+                sql += " LIMIT "+limit.intValue();
+            }
+            if (offset !=null) {
+                sql += " OFFSET "+offset.intValue();
+            }
+
+            // create the java statement
+            Statement st = connection.createStatement();
+
+            // populate the query, and get a java resultset
+            rs = st.executeQuery(sql);
+
+            // iterate through the java resultset
+            ArrayList<ImDBBaseEntity> l = new ArrayList<>(0);
+
+            while (rs.next()) {
+                ImDBBaseEntity title = dbValuator.retrieve(rs);
+                l.add(title);
+            }
+            st.close();
+            return l;
+
+        } catch (Exception e) {
+            System.out.println("retrieveTitleById ex "+e);
+            System.out.println("retrieveTitleById result set "+rs);
+        }
+        return null;
+    }
+
+    // default limit=0 --> no limit offset=0
     public ArrayList<ImDBBaseEntity> retrieveListOfTitles(String whereClause, IDBValuator dbValuator) {
         Connection connection = null;
         ResultSet rs = null;

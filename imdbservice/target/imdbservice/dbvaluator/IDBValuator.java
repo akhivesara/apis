@@ -57,7 +57,7 @@ public abstract class IDBValuator {
 
 
     // Cannot be overridden
-    public final ArrayList<ArrayList> execute(ImDBBaseEntity entity) throws Exception {
+    public final ArrayList<ArrayList> populate(ImDBBaseEntity entity) throws Exception {
         validator();
         ArrayList<ArrayList> returnVal = new ArrayList<>(0);
         ArrayList vals = valuesPerEntity(entity);

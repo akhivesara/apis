@@ -11,6 +11,6 @@ public class DataUpdatingTool {
 //        String user = args[1];
 //        String pwd = args[2];
 
-        DatabaseController.getInstance().fetchAndSaveRatings();
+        IMDBService.getInstance().fetchAndSaveRatings();
     }
 }

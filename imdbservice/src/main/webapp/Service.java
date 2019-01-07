@@ -7,10 +7,7 @@ import main.webapp.model.Title;
 import main.webapp.model.credits.Person;
 import main.webapp.util.ImdbUtils;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.text.SimpleDateFormat;
@@ -23,15 +20,20 @@ import java.util.HashMap;
 public class Service {
 
 
-    // POPULATE DB
-    // CRONJOB  TASK 2
-
+    //
+    // TODO CRONJOB
+    // TODO Move toDataUpdatingTool
     @GET
     @Path("downloadfile")
     @Produces(MediaType.APPLICATION_JSON)
     public Result download(@QueryParam("file") String input) {
         Result result = new Result("downloadExample");
         result.setFile(input);
+        /*
+        1. Download file/s
+        2. save file
+        3. populate db
+        */
         switch (result.getFile()) {
             case "title":
                 //TODO Multiple files
@@ -49,22 +51,24 @@ public class Service {
             case "writer":
                 IMDBService.getInstance().fetchAndSaveWriter();
                 break;
-
             case "cast":
                 IMDBService.getInstance().fetchAndSaveCast();
                 break;
             case "rating":
-
-                /*
-                1. Download file/s
-                2. save file
-                3. populate db
-                 */
                 IMDBService.getInstance().fetchAndSaveRatings();
                 break;
             case "genre":
-                // Multiple files
                 IMDBService.getInstance().fetchAndSaveGenres();
+                break;
+            case "all":
+                IMDBService.getInstance().fetchAndSaveTitles();
+                IMDBService.getInstance().fetchAndSavePersons();
+                IMDBService.getInstance().fetchAndSaveEpisodes();
+                IMDBService.getInstance().fetchAndSaveCast();
+                IMDBService.getInstance().fetchAndSaveRatings();
+                IMDBService.getInstance().fetchAndSaveGenres();
+                IMDBService.getInstance().fetchAndSaveDirector();
+                IMDBService.getInstance().fetchAndSaveWriter();
                 break;
             // TODO: skip as director and writer has this covered
             // CAST DISABLE
@@ -72,10 +76,6 @@ public class Service {
 //                IMDBService.getInstance().fetchAndSaveCrew();
 //                break;
         }
-//        if ("rating".equalsIgnoreCase(result.getFile())) {
-//            FileDownloader.downloadRatings();
-//        }
-
         return result;
     }
 
@@ -138,31 +138,36 @@ public class Service {
         return result;
     }
 
-
+    /**
+     *
+     * @param input
+     * @param i
+     * @return
+     */
     @GET
-    @Path("title")
+    @Path("title/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response titleDetails(@QueryParam("id") String input) {
+    public Response titleDetails(@PathParam("id") String input) {
         //Logger.getLogger().info();
-        Title title = (Title) IMDBService.getInstance().retrieveTitleById(input);
+        Title title = IMDBService.getInstance().retrieveTitleById(input);
         String employeeJsonString = new Gson().toJson(title);
         return Response.ok(employeeJsonString,MediaType.APPLICATION_JSON_TYPE).build();
     }
 
     @GET
-    @Path("person")
+    @Path("person/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response personDetails(@QueryParam("id") String input) {
+    public Response personDetails(@PathParam("id") String input) {
         //Logger.getLogger().info();
-        Person title = (Person) IMDBService.getInstance().retrievePersonById(input);
+        Person title = IMDBService.getInstance().retrievePersonById(input);
         String employeeJsonString = new Gson().toJson(title);
         return Response.ok(employeeJsonString,MediaType.APPLICATION_JSON_TYPE).build();
     }
 
     @GET
-    @Path("rating")
+    @Path("title/rating/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response ratingDetails(@QueryParam("id") String input) {
+    public Response ratingDetails(@PathParam("id") String input) {
         //Logger.getLogger().info();
         Rating title = (Rating) IMDBService.getInstance().retrieveRatingById(input);
         String employeeJsonString = new Gson().toJson(title);
@@ -170,11 +175,11 @@ public class Service {
     }
 
     @GET
-    @Path("adultTitles")
+    @Path("lists/adultTitles")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response adult() {
+    public Response adult(@QueryParam("limit") String limit, @QueryParam("offset") String offset) {
         //Logger.getLogger().info();
-        ArrayList<ImDBBaseEntity> titles = IMDBService.getInstance().retrieveAdultTitles();
+        ArrayList<ImDBBaseEntity> titles = IMDBService.getInstance().retrieveAdultTitles(limit, offset);
         HashMap attributes;
         attributes = new HashMap<String, Object>();
         attributes.put("adult", true);
@@ -183,7 +188,7 @@ public class Service {
     }
 
     @GET
-    @Path("titlesByType")
+    @Path("lists/type/{type}")
     @Produces(MediaType.APPLICATION_JSON)
     //short
     //movie
@@ -195,9 +200,8 @@ public class Service {
     //tvSpecial
     //video
     //videoGame
-    public Response titlesByType(@QueryParam("type") String input) {
-        //Logger.getLogger().info();
-        ArrayList<ImDBBaseEntity> titles = IMDBService.getInstance().retrieveListOfTitlesByType(input);
+    public Response titlesByType(@PathParam("type") String input, @QueryParam("limit") String limit, @QueryParam("offset") String offset) {
+        ArrayList<HashMap> titles = IMDBService.getInstance().retrieveListOfTitlesByType(input, limit, offset);
         HashMap attributes;
         attributes = new HashMap<String, Object>();
         attributes.put("type", input);
@@ -235,11 +239,11 @@ public class Service {
     //Reality-TV
     //Adult
     @GET
-    @Path("titlesByGenre")
+    @Path("lists/genre/{genre}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response titlesByGenre(@QueryParam("genre") String input) {
+    public Response titlesByGenre(@PathParam("genre") String input, @QueryParam("limit") String limit, @QueryParam("offset") String offset) {
         //Logger.getLogger().info();
-        ArrayList<HashMap> titles = IMDBService.getInstance().retrieveListOfTitlesByGenre(input);
+        ArrayList<HashMap> titles = IMDBService.getInstance().retrieveListOfTitlesByGenre(input, limit, offset);
         HashMap attributes;
         attributes = new HashMap<String, Object>();
         attributes.put("genre", input);

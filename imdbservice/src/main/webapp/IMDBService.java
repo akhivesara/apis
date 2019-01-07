@@ -5,10 +5,15 @@ import main.webapp.model.*;
 import main.webapp.model.credits.*;
 import main.webapp.util.ImdbUtils;
 import main.webapp.util.PathUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -292,34 +297,57 @@ public class IMDBService {
         return (Rating)db.retrieveFromTableById(id, new RatingDBValuator());
     }
 
-    public ArrayList<ImDBBaseEntity> retrieveAdultTitles() {
+    public ArrayList<ImDBBaseEntity> retrieveAdultTitles(String limit, String offset) {
         MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         String whereClause = "WHERE isAdult"+"='"+1+"'";
-        return db.retrieveListOfTitles(whereClause, new TitleDBValuator());
+        return db.retrieveListOfTitles(whereClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
 
 //        return db.retrieveAdultTitles();
     }
 
-    public ArrayList<ImDBBaseEntity> retrieveListOfTitlesByType(String type) {
+    public ArrayList<HashMap> retrieveListOfTitlesByType(String type, String limit, String offset) {
         MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         String whereClause = "WHERE "+ "titleType"+"='"+type+"'";
-        return db.retrieveListOfTitles(whereClause, new TitleDBValuator());
+        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        return convertToKeys(lists, new String[]{"id"});
     }
 
-    public ArrayList<HashMap> retrieveListOfTitlesByGenre(String type) {
+    public ArrayList<HashMap> retrieveListOfTitlesByType(String type) {
+        return retrieveListOfTitlesByType(type, null, null);
+    }
+
+    public ArrayList<HashMap> retrieveListOfTitlesByGenre(String genre, String limit, String offset) {
         MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        String whereClause = "WHERE "+ "genre"+"='"+type+"'";
-        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, new GenreDBValuator());
-        ArrayList<HashMap> returnList = new ArrayList<>(lists.size());
-        for (int i=0; i < lists.size() ; i++) {
+        String whereClause = "WHERE "+ "genre"+"='"+genre+"'";
+        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, new GenreDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        return convertToKeys(lists, new String[]{"id"});
+    }
+
+    public ArrayList<HashMap> retrieveListOfTitlesByGenre(String genre) {
+        return retrieveListOfTitlesByGenre(genre, null, null);
+    }
+
+    private ArrayList<HashMap> convertToKeys(ArrayList<ImDBBaseEntity> entities, String[] keys) {
+        ArrayList<HashMap> returnList = new ArrayList<>(entities.size());
+        for (int i=0; i < entities.size() ; i++) {
             HashMap value = new HashMap(2);
-            Title title = (Title)lists.get(i);
-            value.put("id",title.getId());
+            ImDBBaseEntity title = entities.get(i);
+
+            for (int k=0; k < keys.length; k++) {
+                try {
+                    value.put(keys[k],PropertyUtils.getProperty(title, keys[k]));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+            }
             returnList.add(value);
         }
         return returnList;
     }
-
     /*
     OLD CODE
 
