@@ -1,0 +1,4 @@
+imdbservice/target/imdbservice.war
+imdbservice/target/classes/*
+imdbservice/target/dependency/*
+imdbservice/target/imdbservice/*
