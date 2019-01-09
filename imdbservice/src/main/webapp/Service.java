@@ -174,6 +174,15 @@ public class Service {
     }
 
     @GET
+    @Path("title/calculaterating/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response ratingRedone(@PathParam("id") String input) {
+        HashMap title = IMDBService.getInstance().calculateRatingById(input);
+        String employeeJsonString = new Gson().toJson(title);
+        return Response.ok(employeeJsonString,MediaType.APPLICATION_JSON_TYPE).build();
+    }
+
+    @GET
     @Path("title/cast/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response castDetails(@PathParam("id") String input) {
