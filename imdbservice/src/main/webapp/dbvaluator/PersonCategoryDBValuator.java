@@ -6,9 +6,13 @@ import main.webapp.model.credits.Person;
 import main.webapp.model.credits.PersonCategory;
 import main.webapp.util.ImdbUtils;
 
+import java.lang.reflect.Constructor;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class PersonCategoryDBValuator extends IDBValuator {
@@ -49,6 +53,26 @@ public class PersonCategoryDBValuator extends IDBValuator {
         v.add(title.getCategory().toString());
         v.add(title.getTitleId());
         return v;
+    }
+
+    @Override
+    public ImDBBaseEntity imdbEntityPerResultSet(ResultSet rs) throws SQLException {
+        ImDBBaseEntity object = null;
+        Class resolvedClass = PersonCategory.findClassByPersonCategory(PersonCategory.findByCategory(rs.getString("category")));
+        HashMap i = new HashMap();
+        i.put("tconst", rs.getString("tconst"));
+        i.put("nconst", rs.getString("nconst"));
+        i.put("name", rs.getString("primaryName"));
+        i.put("title", rs.getString("title"));
+        Constructor<?> resolvedCons = null;
+        try {
+            resolvedCons = resolvedClass.getConstructor(HashMap.class);
+            object = (APersonCategory)resolvedCons.newInstance(i);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return object;
     }
 }
 

@@ -13,8 +13,8 @@ public class Producer extends APersonCategory implements ImDBBaseEntity {
 
     public Producer(HashMap<String, String> data)
     {
-        this(data.get("nconst"));
-        setTitleId(data.get("tconst"));
+        super(data);
+        setCategory(PersonCategory.PRODUCER);
     }
 
     @Override

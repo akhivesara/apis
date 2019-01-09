@@ -1,19 +1,18 @@
 package main.webapp;
 
 import main.webapp.dbvaluator.*;
-import main.webapp.model.*;
+import main.webapp.model.Episode;
+import main.webapp.model.Rating;
+import main.webapp.model.Title;
 import main.webapp.model.credits.*;
 import main.webapp.util.ImdbUtils;
 import main.webapp.util.PathUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -295,6 +294,11 @@ public class IMDBService {
     public Rating retrieveRatingById(String id) {
         MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         return (Rating)db.retrieveFromTableById(id, new RatingDBValuator());
+    }
+
+    public ArrayList<ImDBBaseEntity> retrieveCastById(String id) {
+        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
+        return db.retrieveCastById(id, new PersonCategoryDBValuator());
     }
 
     public ArrayList<ImDBBaseEntity> retrieveAdultTitles(String limit, String offset) {

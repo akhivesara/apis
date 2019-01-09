@@ -6,6 +6,10 @@ import java.util.HashMap;
 
 public class Person implements ImDBBaseEntity {
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Person(String id, String name) {
         this.id = id;
         this.name = name;

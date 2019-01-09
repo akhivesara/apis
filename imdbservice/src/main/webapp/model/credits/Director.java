@@ -13,6 +13,8 @@ public class Director extends APersonCategory {
     public Director(HashMap<String, String> data) {
         this(data.get("directors") != null ? data.get("directors"): data.get("nconst"));
         setTitleId(data.get("tconst"));
+        setTitle(data.get("title"));
+        setName(data.get("name"));
     }
 
 

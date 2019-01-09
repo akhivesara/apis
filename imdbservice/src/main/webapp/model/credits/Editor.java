@@ -13,8 +13,8 @@ public class Editor extends APersonCategory implements ImDBBaseEntity {
 
     public Editor(HashMap<String, String> data)
     {
-        this(data.get("nconst"));
-        setTitleId(data.get("tconst"));
+        super(data);
+        setCategory(PersonCategory.EDITOR);
     }
 
     @Override

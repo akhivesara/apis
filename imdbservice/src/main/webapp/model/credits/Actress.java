@@ -14,8 +14,8 @@ public class Actress extends APersonCategory implements ImDBBaseEntity {
 
     public Actress(HashMap<String, String> data)
     {
-        this(data.get("nconst"));
-        setTitleId(data.get("tconst"));
+        super(data);
+        setCategory(PersonCategory.ACTRESS);
     }
 
     @Override

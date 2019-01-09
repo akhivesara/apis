@@ -9,6 +9,16 @@ public abstract class APersonCategory extends Person {
 
     private String titleId;
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    private String title;
+
     public APersonCategory(String id) {
         super(id);
     }
@@ -16,7 +26,9 @@ public abstract class APersonCategory extends Person {
     public APersonCategory(HashMap<String, String> data)
     {
         this(data.get("nconst"));
-        setTitleId(data.get("nconst"));
+        setTitleId(data.get("tconst"));
+        setTitle(data.get("title"));
+        setName(data.get("name"));
     }
 
     abstract public void setCategory(PersonCategory category);

@@ -168,10 +168,20 @@ public class Service {
     @Path("title/rating/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response ratingDetails(@PathParam("id") String input) {
-        //Logger.getLogger().info();
-        Rating title = (Rating) IMDBService.getInstance().retrieveRatingById(input);
+        Rating title = IMDBService.getInstance().retrieveRatingById(input);
         String employeeJsonString = new Gson().toJson(title);
         return Response.ok(employeeJsonString,MediaType.APPLICATION_JSON_TYPE).build();
+    }
+
+    @GET
+    @Path("title/cast/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response castDetails(@PathParam("id") String input) {
+        ArrayList<ImDBBaseEntity> titles = IMDBService.getInstance().retrieveCastById(input);
+        HashMap attributes = new HashMap();
+        attributes.put("listsKey", "cast");
+        String employeeJsonString = new Gson().toJson(listDecorator(titles, attributes));
+        return Response.ok(employeeJsonString, MediaType.APPLICATION_JSON_TYPE).build();
     }
 
     @GET
@@ -362,7 +372,12 @@ public class Service {
 
         HashMap response = new HashMap();
         if (lists != null) {
-            response.put("lists", lists);
+            String key = "lists";
+            if (attributes != null && attributes.get("listsKey") != null) {
+                key = (String)attributes.get("listsKey");
+                attributes.remove("listsKey");
+            }
+            response.put(key, lists);
             response.put("size", lists.size());
         }
         response.put("timestamp", nowString);

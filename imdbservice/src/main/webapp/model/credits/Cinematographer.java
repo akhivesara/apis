@@ -14,8 +14,8 @@ public class Cinematographer extends APersonCategory implements ImDBBaseEntity {
 
     public Cinematographer(HashMap<String, String> data)
     {
-        this(data.get("nconst"));
-        setTitleId(data.get("tconst"));
+        super(data);
+        setCategory(PersonCategory.CINEMATOGRAPHER);
     }
 
     @Override

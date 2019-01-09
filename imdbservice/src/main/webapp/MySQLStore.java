@@ -1,6 +1,7 @@
 package main.webapp;
 
 import main.webapp.dbvaluator.IDBValuator;
+import main.webapp.util.ImdbUtils;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -640,11 +641,52 @@ public class MySQLStore {
             System.out.println(" Done-- insertCrewTypeWithErrorHandler");
         }
     }
-
     */
 
+    public ArrayList<ImDBBaseEntity> retrieveCastById(String id, IDBValuator dbValuator) {
+
+        ArrayList<ImDBBaseEntity> data = new ArrayList<>(0);
+        Connection connection = null;
+        ResultSet rs = null;
+        try {
+            connection = DriverManager.getConnection(url, user, pwd);
+
+            // our SQL SELECT query.
+//            String sql = "select title, primaryName, category , title.tconst, person.nconst from title " +
+//                            "join cast_title " +
+//                            "on title.tconst = cast_title.tconst " +
+//                            "join person " +
+//                            "on cast_title.nconst = person.nconst " +
+//                            "where title.tconst='"+ id +"'";
+
+            String sql = "select title, primaryName, category , title.tconst, person.nconst" +
+                    " from " + ImdbUtils.TITLE_DB_TABLE_NAME +
+                    " join " + ImdbUtils.CAST_DB_TABLE_NAME +
+                    " on "+ImdbUtils.TITLE_DB_TABLE_NAME+".tconst = "+ImdbUtils.CAST_DB_TABLE_NAME+".tconst" +
+                    " join " + ImdbUtils.PERSON_DB_TABLE_NAME +
+                    " on "+ImdbUtils.CAST_DB_TABLE_NAME+".nconst = "+ImdbUtils.PERSON_DB_TABLE_NAME+".nconst" +
+                    " where "+ ImdbUtils.TITLE_DB_TABLE_NAME +".tconst='"+ id +"'";
+
+            // create the java statement
+            Statement st = connection.createStatement();
+
+            // populate the query, and get a java resultset
+            rs = st.executeQuery(sql);
+
+            // iterate through the java resultset
+            while (rs.next()) {
+                data.add(dbValuator.imdbEntityPerResultSet(rs));
+            }
+            st.close();
+
+        } catch (Exception e) {
+            System.out.println("retrieveTitleById ex "+e);
+            System.out.println("retrieveTitleById result set "+rs);
+        }
+        return data;
+    }
+
     public ImDBBaseEntity retrieveFromTableById(String id, IDBValuator dbValuator) {
-        //kldfl;asd
         Connection connection = null;
         ResultSet rs = null;
         try {

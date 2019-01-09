@@ -15,8 +15,8 @@ public class Composer extends APersonCategory implements ImDBBaseEntity {
 
     public Composer(HashMap<String, String> data)
     {
-        this(data.get("nconst"));
-        setTitleId(data.get("tconst"));
+        super(data);
+        setCategory(PersonCategory.COMPOSER);
     }
 
 

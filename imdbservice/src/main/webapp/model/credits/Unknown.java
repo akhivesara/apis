@@ -13,8 +13,8 @@ public class Unknown extends APersonCategory implements ImDBBaseEntity {
 
     public Unknown(HashMap<String, String> data)
     {
-        this(data.get("nconst"));
-        setTitleId(data.get("tconst"));
+        super(data);
+        setCategory(PersonCategory.UNKNOWN);
     }
 
     @Override
