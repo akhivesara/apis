@@ -300,31 +300,40 @@ public class IMDBService {
     public ArrayList<ImDBBaseEntity> retrieveAdultTitles(String limit, String offset) {
         MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         String whereClause = "WHERE isAdult"+"='"+1+"'";
-        return db.retrieveListOfTitles(whereClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
-
-//        return db.retrieveAdultTitles();
+        String orderByClause = "ORDER BY title";
+        return db.retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
     }
 
     public ArrayList<HashMap> retrieveListOfTitlesByType(String type, String limit, String offset) {
         MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         String whereClause = "WHERE "+ "titleType"+"='"+type+"'";
-        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        String orderByClause = "ORDER BY title";
+        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
         return convertToKeys(lists, new String[]{"id"});
-    }
-
-    public ArrayList<HashMap> retrieveListOfTitlesByType(String type) {
-        return retrieveListOfTitlesByType(type, null, null);
     }
 
     public ArrayList<HashMap> retrieveListOfTitlesByGenre(String genre, String limit, String offset) {
         MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        String whereClause = "WHERE "+ "genre"+"='"+genre+"'";
-        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, new GenreDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        String whereClause = "WHERE "+ "genre" + "='"+genre+"'";
+        String orderByClause = "ORDER BY title";
+        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, orderByClause, new GenreDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
         return convertToKeys(lists, new String[]{"id"});
     }
 
-    public ArrayList<HashMap> retrieveListOfTitlesByGenre(String genre) {
-        return retrieveListOfTitlesByGenre(genre, null, null);
+    public ArrayList<HashMap> retrieveListOfTitlesByName(String query, String limit, String offset) {
+        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
+        String whereClause = "WHERE "+ "title" + " LIKE '% "+query+"%'";
+        String orderByClause = "ORDER BY title";
+        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        return convertToKeys(lists, new String[]{"id", "title"});
+    }
+
+    public ArrayList<HashMap> retrieveListOfPeopleByName(String query, String limit, String offset) {
+        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
+        String whereClause = "WHERE "+ "primaryName" + " LIKE '% "+query+"%'";
+        String orderByClause = "ORDER BY primaryName";
+        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, orderByClause, new PersonDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        return convertToKeys(lists, new String[]{"id", "name"});
     }
 
     private ArrayList<HashMap> convertToKeys(ArrayList<ImDBBaseEntity> entities, String[] keys) {

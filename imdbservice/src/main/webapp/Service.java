@@ -141,8 +141,8 @@ public class Service {
     /**
      *
      * @param input
-     * @param i
-     * @return
+     * @param
+     * @returnF
      */
     @GET
     @Path("title/{id}")
@@ -178,7 +178,6 @@ public class Service {
     @Path("lists/adultTitles")
     @Produces(MediaType.APPLICATION_JSON)
     public Response adult(@QueryParam("limit") String limit, @QueryParam("offset") String offset) {
-        //Logger.getLogger().info();
         ArrayList<ImDBBaseEntity> titles = IMDBService.getInstance().retrieveAdultTitles(limit, offset);
         HashMap attributes;
         attributes = new HashMap<String, Object>();
@@ -205,6 +204,13 @@ public class Service {
         HashMap attributes;
         attributes = new HashMap<String, Object>();
         attributes.put("type", input);
+        if (limit != null) {
+            attributes.put("limit", limit);
+        }
+        if (offset != null) {
+            attributes.put("offset", offset);
+        }
+
         String jsonString = new Gson().toJson(listDecorator(titles,attributes));
         return Response.ok(jsonString,MediaType.APPLICATION_JSON_TYPE).build();
     }
@@ -247,7 +253,53 @@ public class Service {
         HashMap attributes;
         attributes = new HashMap<String, Object>();
         attributes.put("genre", input);
+        if (limit != null) {
+            attributes.put("limit", limit);
+        }
+        if (offset != null) {
+            attributes.put("offset", offset);
+        }
         String jsonString = new Gson().toJson(listDecorator(titles, attributes));
+        return Response.ok(jsonString,MediaType.APPLICATION_JSON_TYPE).build();
+    }
+
+    @GET
+    @Path("search/{query}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response search(@PathParam("query") String input, @QueryParam("type") String type, @QueryParam("limit") String limit, @QueryParam("offset") String offset) {
+        //Logger.getLogger().info();
+        ArrayList<HashMap> titles = null;
+        ArrayList<HashMap> persons = null;
+        ArrayList<HashMap> list = null;
+        if (type == null) type = "fallback";
+        switch (type) {
+            case "person":
+                list = IMDBService.getInstance().retrieveListOfPeopleByName(input, limit, offset);
+                break;
+            case "title":
+                list = IMDBService.getInstance().retrieveListOfTitlesByName(input, limit, offset);
+                break;
+            default: // fallback
+                limit = limit != null ? limit : "100";
+                persons = IMDBService.getInstance().retrieveListOfPeopleByName(input, limit, offset);
+                titles = IMDBService.getInstance().retrieveListOfTitlesByName(input, limit, offset);
+
+        }
+        HashMap attributes;
+        attributes = new HashMap<String, Object>();
+        attributes.put("search", input);
+        if (limit != null) {
+            attributes.put("limit", limit);
+        }
+        attributes.put("offset", offset != null ? offset : 0);
+        String jsonString;
+        if (list != null) {
+            jsonString = new Gson().toJson(listDecorator(list, attributes));
+        } else {
+            attributes.put("title", listDecorator(titles, null));
+            attributes.put("person", listDecorator(persons, null));
+            jsonString = new Gson().toJson(listDecorator(null,attributes));
+        }
         return Response.ok(jsonString,MediaType.APPLICATION_JSON_TYPE).build();
     }
 
@@ -309,31 +361,17 @@ public class Service {
         String nowString = sdf.format(now);
 
         HashMap response = new HashMap();
-        response.put("lists", lists);
-        response.put("size", lists.size());
+        if (lists != null) {
+            response.put("lists", lists);
+            response.put("size", lists.size());
+        }
         response.put("timestamp", nowString);
-        response.putAll(attributes);
+        if (attributes != null) {
+            response.putAll(attributes);
+        }
 
         return response;
 
 
     }
-    /*
-    OLD CODE
-
-        @GET
-    @Path("downloadExample")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Result download(@QueryParam("input") double input) {
-        Result result = new Result("downloadExample");
-        result.setInput(input);
-        result.setOutput(Math.sqrt(result.getInput()));
-
-        FileDownloader.downloadExample();
-
-        return result;
-    }
-
-
-     */
 }

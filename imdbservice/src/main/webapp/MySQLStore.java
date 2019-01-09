@@ -674,7 +674,7 @@ public class MySQLStore {
         return null;
     }
 
-    public ArrayList<ImDBBaseEntity> retrieveListOfTitles(String whereClause, IDBValuator dbValuator, Integer limit, Integer offset) {
+    public ArrayList<ImDBBaseEntity> retrieveListOfTitles(String whereClause, String orderByClause, IDBValuator dbValuator, Integer limit, Integer offset) {
         Connection connection = null;
         ResultSet rs = null;
         try {
@@ -682,6 +682,10 @@ public class MySQLStore {
 
             //dbValuator.validateRetrieveInputs();
             String sql = "SELECT * FROM " + dbValuator.getDBTable() + " " + whereClause;
+
+            if (orderByClause != null) {
+                sql += " "+orderByClause;
+            }
 
             if (limit != null) {
                 sql += " LIMIT "+limit.intValue();
