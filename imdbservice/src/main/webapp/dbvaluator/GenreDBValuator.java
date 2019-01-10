@@ -1,7 +1,6 @@
 package main.webapp.dbvaluator;
 
-import main.webapp.ImDBBaseEntity;
-import main.webapp.model.Rating;
+import main.webapp.model.ImDBBaseEntity;
 import main.webapp.model.Title;
 import main.webapp.util.ImdbUtils;
 
@@ -58,7 +57,7 @@ public class GenreDBValuator extends IDBValuator {
     }
 
     @Override
-    public ImDBBaseEntity imdbEntityPerResultSet(ResultSet rs) throws SQLException {
+    public ImDBBaseEntity entityPerResultSet(ResultSet rs) throws SQLException {
         String tconst = rs.getString("tconst");
         String genre = rs.getString("genre");
         return new Title(tconst, genre);

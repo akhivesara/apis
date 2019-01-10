@@ -1,6 +1,6 @@
 package main.webapp.dbvaluator;
 
-import main.webapp.ImDBBaseEntity;
+import main.webapp.model.ImDBBaseEntity;
 import main.webapp.model.Rating;
 import main.webapp.util.ImdbUtils;
 
@@ -52,7 +52,7 @@ public class RatingDBValuator extends IDBValuator {
     }
 
     @Override
-    public ImDBBaseEntity imdbEntityPerResultSet(ResultSet rs) throws SQLException {
+    public ImDBBaseEntity entityPerResultSet(ResultSet rs) throws SQLException {
         String tconst = rs.getString("tconst");
         Double rating = rs.getDouble("averageRating");
         Integer votes = rs.getInt("numVotes");
@@ -61,7 +61,7 @@ public class RatingDBValuator extends IDBValuator {
     }
 
     @Override
-    public String getColumnForPrimaryWhereClauseById() {
+    public String getColumnForPrimaryKey() {
         return "tconst";
     }
 }

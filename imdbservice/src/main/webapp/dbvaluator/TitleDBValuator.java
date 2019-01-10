@@ -1,7 +1,6 @@
 package main.webapp.dbvaluator;
 
-import main.webapp.ImDBBaseEntity;
-import main.webapp.dbvaluator.IDBValuator;
+import main.webapp.model.ImDBBaseEntity;
 import main.webapp.model.Title;
 import main.webapp.util.ImdbUtils;
 
@@ -55,12 +54,12 @@ public class TitleDBValuator extends IDBValuator {
     }
 
     @Override
-    public String getColumnForPrimaryWhereClauseById() {
+    public String getColumnForPrimaryKey() {
         return "tconst";
     }
 
     @Override
-    public Title imdbEntityPerResultSet(ResultSet rs) throws SQLException {
+    public Title entityPerResultSet(ResultSet rs) throws SQLException {
         String tconst = rs.getString("tconst");
         String titleType = rs.getString("titleType");
         String title = rs.getString("title");

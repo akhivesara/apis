@@ -1,5 +1,9 @@
 package main.webapp.model.credits;
 
+/**
+ * PersonCategory ENUM represents all the possible
+ * category a cast can be
+ */
 public enum PersonCategory {
     DIRECTOR("director"),
     WRITER("writer"),

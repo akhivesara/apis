@@ -1,6 +1,6 @@
 package main.webapp.model.credits;
 
-import main.webapp.ImDBBaseEntity;
+import main.webapp.model.ImDBBaseEntity;
 
 import java.util.HashMap;
 

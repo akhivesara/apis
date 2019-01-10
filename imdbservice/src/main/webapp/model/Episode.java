@@ -1,7 +1,5 @@
 package main.webapp.model;
 
-import main.webapp.ImDBBaseEntity;
-
 import java.util.HashMap;
 
 //data model?

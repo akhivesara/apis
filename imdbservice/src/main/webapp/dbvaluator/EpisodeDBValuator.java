@@ -1,8 +1,7 @@
 package main.webapp.dbvaluator;
 
-import main.webapp.ImDBBaseEntity;
+import main.webapp.model.ImDBBaseEntity;
 import main.webapp.model.Episode;
-import main.webapp.model.credits.Director;
 import main.webapp.util.ImdbUtils;
 
 import java.sql.Types;

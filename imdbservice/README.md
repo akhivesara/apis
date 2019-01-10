@@ -1,7 +1,12 @@
-//TODO: Add instructions
+# Design
+
+### EER Diagram  ![adsf](db.png)
+
+# Database Setup Instructions 
 
 
-REST APIS:
+
+#REST APIS:
 
 All APIs accept limit and offset query params
 

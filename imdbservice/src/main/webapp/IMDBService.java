@@ -2,6 +2,7 @@ package main.webapp;
 
 import main.webapp.dbvaluator.*;
 import main.webapp.model.Episode;
+import main.webapp.model.ImDBBaseEntity;
 import main.webapp.model.Rating;
 import main.webapp.model.Title;
 import main.webapp.model.credits.*;
@@ -19,12 +20,11 @@ import java.util.Map;
 
 public class IMDBService {
 
-    private static IMDBService instance;
-
     private static String LOCAL_DB_PATH  = "jdbc:mysql://localhost/nflxtakehome";
     private static String LOCAL_DB_USER = "nflxtakehome";
     private static String LOCAL_DB_PWD = "nflxtakehome";
 
+    private static MySQLStore mySQLStore;
     private IMDBService(){}
 
     private static class SingletonHelper{
@@ -35,6 +35,14 @@ public class IMDBService {
         return SingletonHelper.INSTANCE;
     }
 
+    // worry about multi-thread?
+    private static MySQLStore getMySQLStore() {
+        if (mySQLStore == null) {
+            mySQLStore = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
+        }
+        return mySQLStore;
+    }
+
     public void fetchAndSaveRatings() {
         /*
             1. Download file/s
@@ -43,10 +51,8 @@ public class IMDBService {
          */
 
         ArrayList<ImDBBaseEntity> ratings = fetchAndSaveByIdentifierAndClass(ImdbUtils.RATINGS_IDENTIFIER, Rating.class);
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        //db.ratingsBatchInsert(ratings);
         try {
-            db.executeBatchInsert(ratings, 0, new RatingDBValuator());
+            getMySQLStore().populateUsingBatchInsert(ratings, 0, new RatingDBValuator());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,11 +68,8 @@ public class IMDBService {
          */
 
         ArrayList<ImDBBaseEntity> episodes = fetchAndSaveByIdentifierAndClass(ImdbUtils.EPISODES_IDENTIFIER, Episode.class);
-
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        //db.episodesBatchInsert(episodes);
         try {
-            db.executeBatchInsert(episodes, 0, new EpisodeDBValuator());
+            getMySQLStore().populateUsingBatchInsert(episodes, 0, new EpisodeDBValuator());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,11 +90,8 @@ public class IMDBService {
 
     public void fetchAndSavePersons() {
         ArrayList<ImDBBaseEntity>  persons = fetchAndSaveByIdentifierAndClass(ImdbUtils.PERSON_IDENTIFIER, Person.class);
-
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        //db.personsBatchInsert(ImdbUtils.PERSON_DB_TABLE_NAME, persons);
         try {
-            db.executeBatchInsert(persons, 0, new PersonDBValuator());
+            getMySQLStore().populateUsingBatchInsert(persons, 0, new PersonDBValuator());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -99,11 +99,8 @@ public class IMDBService {
 
     public void fetchAndSaveTitles() {
         ArrayList<ImDBBaseEntity>  titles = fetchAndSaveByIdentifierAndClass(ImdbUtils.TITLE_IDENTIFIER, Title.class);
-
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        //db.titlesBatchInsert(ImdbUtils.TITLE_DB_TABLE_NAME, titles);
         try {
-            db.executeBatchInsert(titles, 0, new TitleDBValuator());
+            getMySQLStore().populateUsingBatchInsert(titles, 0, new TitleDBValuator());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -116,14 +113,11 @@ public class IMDBService {
     public void fetchAndSaveGenres() {
         System.out.println("fetchAndSaveGenres");
         ArrayList<ImDBBaseEntity>  titles = fetchAndSaveByIdentifierAndClass(ImdbUtils.TITLE_IDENTIFIER, Title.class);
-
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         try {
-            db.executeBatchInsert(titles, 0, new GenreDBValuator());
+            getMySQLStore().populateUsingBatchInsert(titles, 0, new GenreDBValuator());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //db.insertGenreBatchWithErrorHandler(ImdbUtils.GENRE_DB_TABLE_NAME, titles, 0);
     }
 
     public void fetchAndSaveDirector() {
@@ -147,20 +141,15 @@ public class IMDBService {
     private void fetchAndSaveDirectorOrWriter(IDBValuator valuator, Class type) {
         System.out.println("fetchAndSaveDirectorOrWriter");
         ArrayList<ImDBBaseEntity>  crew = fetchAndSaveByIdentifierAndClass(ImdbUtils.TITLE_CREW_IDENTIFIER, type);
-
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        db.executeBatchInsert(crew, 0, valuator);
+        getMySQLStore().populateUsingBatchInsert(crew, 0, valuator);
     }
 
     private void fetchAndSaveCastImpl(String []tableNames, String identifier) {
         System.out.println("fetchAndSaveCastImpl");
         ArrayList<ImDBBaseEntity>  entities = fetchAndSaveByIdentifierAndClass(identifier, APersonCategory.class);
-
         if (entities != null && entities.size() > 0) {
-            MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-            //db.insertCastBatchWithErrorHandler(tableNames[0], entities, 0);
             try {
-                db.executeBatchInsert(entities, 0, new PersonCategoryDBValuator());
+                getMySQLStore().populateUsingBatchInsert(entities, 0, new PersonCategoryDBValuator());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -249,10 +238,8 @@ public class IMDBService {
                         }
                     }
 
-
-
                     // if CAST find the actual class to instantiate OR introduce a base class
-                    // TODO: better solution
+                    // TODO: Remove PersonCategory dependency from IMDBService
                     if (type.getCanonicalName().equals(APersonCategory.class.getCanonicalName())) {
                         Class resolvedClass = PersonCategory.findClassByPersonCategory(PersonCategory.findByCategory(lineMap.get("category")));
 
@@ -262,7 +249,6 @@ public class IMDBService {
                         dataListIMDBObject.add((ImDBBaseEntity) object);
                     } else if (commaValues.length <= 1 && lineMap.keySet().size() > 1) {
                         object = cons.newInstance(lineMap);
-
                         dataListIMDBObject.add((ImDBBaseEntity) object);
                     }
                 }
@@ -279,74 +265,62 @@ public class IMDBService {
         return null;
     }
 
+    // TODO: Consider spiltting populate and retrieval code
 
     public Title retrieveTitleById(String id) {
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        //return db.retrieveTitleById(id);
-        return (Title)db.retrieveFromTableById(id, new TitleDBValuator());
+        return (Title)getMySQLStore().retrieveFromTableById(id, new TitleDBValuator());
     }
 
     public Person retrievePersonById(String id) {
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        return (Person)db.retrieveFromTableById(id, new PersonDBValuator());
+        return (Person)getMySQLStore().retrieveFromTableById(id, new PersonDBValuator());
     }
 
     public Rating retrieveRatingById(String id) {
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        return (Rating)db.retrieveFromTableById(id, new RatingDBValuator());
+        return (Rating)getMySQLStore().retrieveFromTableById(id, new RatingDBValuator());
     }
 
     public HashMap calculateRatingById(String id) {
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        return db.calculateRatingById(id, new RatingDBValuator());
+        return getMySQLStore().calculateRatingById(id, new RatingDBValuator());
     }
 
     public ArrayList<HashMap> calculateAllTitlesRating(String limit, String offset) {
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        return db.calculateAllTitlesRating(new RatingDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        return getMySQLStore().calculateAllTitlesRating(new RatingDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
     }
 
     public ArrayList<ImDBBaseEntity> retrieveCastById(String id) {
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
-        return db.retrieveCastById(id, new PersonCategoryDBValuator());
+        return getMySQLStore().retrieveCastById(id, new PersonCategoryDBValuator());
     }
 
     public ArrayList<ImDBBaseEntity> retrieveAdultTitles(String limit, String offset) {
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         String whereClause = "WHERE isAdult"+"='"+1+"'";
         String orderByClause = "ORDER BY title";
-        return db.retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        return getMySQLStore().retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
     }
 
     public ArrayList<HashMap> retrieveListOfTitlesByType(String type, String limit, String offset) {
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         String whereClause = "WHERE "+ "titleType"+"='"+type+"'";
         String orderByClause = "ORDER BY title";
-        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        ArrayList<ImDBBaseEntity> lists = getMySQLStore().retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
         return convertToKeys(lists, new String[]{"id"});
     }
 
     public ArrayList<HashMap> retrieveListOfTitlesByGenre(String genre, String limit, String offset) {
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         String whereClause = "WHERE "+ "genre" + "='"+genre+"'";
-        String orderByClause = "ORDER BY title";
-        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, orderByClause, new GenreDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        ArrayList<ImDBBaseEntity> lists = getMySQLStore().retrieveListOfTitles(whereClause, null, new GenreDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
         return convertToKeys(lists, new String[]{"id"});
     }
 
     public ArrayList<HashMap> retrieveListOfTitlesByName(String query, String limit, String offset) {
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         String whereClause = "WHERE "+ "title" + " LIKE '% "+query+"%'";
         String orderByClause = "ORDER BY title";
-        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        ArrayList<ImDBBaseEntity> lists = getMySQLStore().retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
         return convertToKeys(lists, new String[]{"id", "title"});
     }
 
     public ArrayList<HashMap> retrieveListOfPeopleByName(String query, String limit, String offset) {
-        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         String whereClause = "WHERE "+ "primaryName" + " LIKE '% "+query+"%'";
         String orderByClause = "ORDER BY primaryName";
-        ArrayList<ImDBBaseEntity> lists = db.retrieveListOfTitles(whereClause, orderByClause, new PersonDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        ArrayList<ImDBBaseEntity> lists = getMySQLStore().retrieveListOfTitles(whereClause, orderByClause, new PersonDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
         return convertToKeys(lists, new String[]{"id", "name"});
     }
 
@@ -371,135 +345,8 @@ public class IMDBService {
         }
         return returnList;
     }
+
     /*
-    OLD CODE
-
-    public void fetchAndSaveTitlesX() {
-//
-//            1. Download files
-//            2. save files
-//            3. populate memory object (consider writing to a file or persisting object)
-//            4. populate db
-
-
-//    FileDownloader.downloadMultipleFiles((String[]) ImdbUtils.TITLE_MAP.get("identifier"));
-      readMultipleFiles();
-    }
-
-        public void fetchAndSaveDirector() {
-        fetchAndSaveCrewImpl(new String[]{ImdbUtils.DIRECTOR_DB_TABLE_NAME}, ImdbUtils.TITLE_CREW_IDENTIFIER);
-    }
-
-    public void fetchAndSaveWriter() {
-        fetchAndSaveCrewImpl(new String[]{ImdbUtils.WRITER_DB_TABLE_NAME}, ImdbUtils.TITLE_CREW_IDENTIFIER);
-    }
-
-        private void readMultipleFiles() {
-
-        //readLinesAndStoreInClassType(PathUtils.getLocalFinalPath(ImdbUtils.EPISODES_IDENTIFIER), Episode.class);
-
-        ArrayList<Map> dataList = new ArrayList<>();
-        ArrayList<Map> wantedDataList = new ArrayList<>();
-        ArrayList<ImDBBaseEntity> dataListObject = new ArrayList<>();
-        HashMap<String, HashMap> titleMapById = new HashMap<String, HashMap>();
-
-        String[] identifiers = (String[]) ImdbUtils.TITLE_MAP.get("identifier");
-
-        for (int fileCount = 0; fileCount < identifiers.length; fileCount ++) {
-
-            String identifier = identifiers[fileCount];
-
-            // read file
-            String filePath = PathUtils.getLocalFinalPath(identifier);
-
-            try {
-                BufferedReader buf = new BufferedReader(new FileReader(filePath));
-                ArrayList<String> words = new ArrayList<>();
-                String lineJustFetched;
-                String[] wordsArray;
-                String[] keysArray = new String[10];
-                HashMap<String, String> lineMap;
-                HashMap<String, String> wantedLineMap;
-
-
-                int lineCount = 0;
-                while (true) {
-
-                    lineJustFetched = buf.readLine();
-                    lineMap = new HashMap<>();
-                    wantedLineMap = new HashMap<>();
-                    if (lineJustFetched == null) {
-                        //lineCount = 0;
-                        break;
-                    } else {
-                        lineCount++;
-                        wordsArray = lineJustFetched.split("\t");
-                        // Skip 1st line
-                        if (lineCount == 1) {
-                            // save keys as a copy
-                            keysArray = wordsArray.clone();
-                            continue;
-                        }
-
-                        for (int w = 0; w < wordsArray.length; w++) {
-                            //for(String each : wordsArray){
-                            String each = wordsArray[w];
-                            if ("\\N".equals(each)) {
-                                each = null;
-                            }
-                            // RATINGS
-                            words.add(each);
-                            lineMap.put(keysArray[w], each);
-                            // filter only what you need, here or make another copy later of what you need?
-                        }
-                        String[] dbKeys = (String[]) ImdbUtils.TITLE_MAP.get(identifier+"_DBKeys");
-
-                        for (String key : dbKeys) {
-                            wantedLineMap.put(key, lineMap.get(key));
-                        }
-//                        if (fileCount > 0) {
-//                            String[] linkedKey = (String[]) ImdbUtils.TITLE_MAP.get("linkedKey");
-//                            break;
-//                            //linkedKey
-//                        } else {
-                            // Make Title objects
-                            String titleId = lineMap.get("titleId");
-
-                            if (titleMapById.get(titleId) != null) {
-                                HashMap<String, String> titleMap = titleMapById.get(titleId);
-                                // append lineMap with title Map
-                                titleMap.putAll(lineMap);
-                                titleMapById.put(titleId, titleMap);
-
-                            } else {
-                                titleMapById.put(titleId, lineMap);
-
-                            }
-//                        }
-
-
-                        dataList.add(lineMap);
-                        wantedDataList.add(wantedLineMap);
-
-//                    Constructor<?> cons = type.getConstructor(HashMap.class);
-//                    Object object = cons.newInstance(lineMap);
-//
-//                    dataListRatings.add((ImDBBaseEntity)object);
-                    }
-                }
-                System.out.println("Total "+ lineCount +"Lines for file "+fileCount +" with file identifier "+identifier);
-
-                buf.close();
-
-
-               // return dataListRatings;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
 
 CREW LOGIC
 

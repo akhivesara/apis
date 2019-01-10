@@ -1,8 +1,7 @@
 package main.webapp.dbvaluator;
 
-import main.webapp.ImDBBaseEntity;
+import main.webapp.model.ImDBBaseEntity;
 import main.webapp.model.credits.APersonCategory;
-import main.webapp.model.credits.Person;
 import main.webapp.model.credits.PersonCategory;
 import main.webapp.util.ImdbUtils;
 
@@ -56,7 +55,7 @@ public class PersonCategoryDBValuator extends IDBValuator {
     }
 
     @Override
-    public ImDBBaseEntity imdbEntityPerResultSet(ResultSet rs) throws SQLException {
+    public ImDBBaseEntity entityPerResultSet(ResultSet rs) throws SQLException {
         ImDBBaseEntity object = null;
         Class resolvedClass = PersonCategory.findClassByPersonCategory(PersonCategory.findByCategory(rs.getString("category")));
         HashMap i = new HashMap();

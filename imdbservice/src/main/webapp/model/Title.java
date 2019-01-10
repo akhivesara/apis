@@ -1,8 +1,5 @@
 package main.webapp.model;
 
-import main.webapp.ImDBBaseEntity;
-
-import java.io.Serializable;
 import java.util.HashMap;
 
 public class Title implements ImDBBaseEntity {

@@ -1,4 +1,4 @@
-import main.webapp.Service;
+import main.webapp.RestfulService;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -17,7 +17,7 @@ public class MainService {
 
         jerseyServlet.setInitParameter(
                 "jersey.config.server.provider.classnames",
-                Service.class.getCanonicalName());
+                RestfulService.class.getCanonicalName());
 
         try {
             jettyServer.start();
