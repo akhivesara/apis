@@ -194,6 +194,17 @@ public class Service {
     }
 
     @GET
+    @Path("lists/calculatedRatings")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response calculatedRatings(@QueryParam("limit") String limit, @QueryParam("offset") String offset) {
+        ArrayList<HashMap> list = IMDBService.getInstance().calculateAllTitlesRating(limit, offset);
+        HashMap attributes = new HashMap();
+        attributes.put("listsKey", "titles");
+        String employeeJsonString = new Gson().toJson(listDecorator(list, attributes));
+        return Response.ok(employeeJsonString,MediaType.APPLICATION_JSON_TYPE).build();
+    }
+
+    @GET
     @Path("lists/adultTitles")
     @Produces(MediaType.APPLICATION_JSON)
     public Response adult(@QueryParam("limit") String limit, @QueryParam("offset") String offset) {

@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class MySQLStore {
@@ -791,5 +792,118 @@ public class MySQLStore {
         }
         return null;
     }
+
+    public HashMap calculateRatingById(String id, IDBValuator dbValuator) {
+        HashMap data = null;
+        Connection connection = null;
+        ResultSet rs = null;
+        try {
+            connection = DriverManager.getConnection(url, user, pwd);
+
+            // our SQL SELECT query.
+            String sql = "WITH aggregate AS (select episode.parentId AS tconst, round(avg(rating.averageRating),2) AS averageRating" +
+            " from episode" +
+            " join rating" +
+            " on episode.id = rating.tconst" +
+            " group by episode.parentId)" +
+            " select * from aggregate" +
+            " where tconst='"+ id +"'";
+
+            // create the java statement
+            Statement st = connection.createStatement();
+
+            // populate the query, and get a java resultset
+            rs = st.executeQuery(sql);
+
+            // iterate through the java resultset
+            if (rs.next()) {
+                data = new HashMap();
+                data.put("titleId", rs.getString("tconst"));
+                data.put("averageRating", rs.getDouble("averageRating"));
+            }
+            st.close();
+
+        } catch (Exception e) {
+            data = null;
+            System.out.println("retrieveTitleById ex "+e);
+            System.out.println("retrieveTitleById result set "+rs);
+        }
+        return data;
+    }
+
+    public ArrayList<HashMap> calculateAllTitlesRating(IDBValuator dbValuator, Integer limit, Integer offset) {
+        ArrayList<HashMap> list = new ArrayList<>(0);
+        HashMap data = null;
+        Connection connection = null;
+        ResultSet rs = null;
+        try {
+            connection = DriverManager.getConnection(url, user, pwd);
+
+            // our SQL SELECT query.
+            String sql = "with aggregate AS (select episode.parentId AS showId, round(avg(rating.averageRating),2) AS newRating" +
+                    " from episode" +
+                    " join rating" +
+                    " on episode.id = rating.tconst" +
+                    " group by episode.parentId)" +
+                    " select * from aggregate" +
+                    " join title" +
+                    " on title.tconst = showId" +
+                    " join rating" +
+                    " on rating.tconst = showId"
+                    ;
+
+            if (limit != null) {
+                sql += " LIMIT "+limit.intValue();
+            }
+            if (offset !=null) {
+                sql += " OFFSET "+offset.intValue();
+            }
+
+            // create the java statement
+            Statement st = connection.createStatement();
+
+            // populate the query, and get a java resultset
+            rs = st.executeQuery(sql);
+
+            // iterate through the java resultset
+            while (rs.next()) {
+                data = new HashMap();
+                data.put("id", rs.getString("showId"));
+                data.put("averageRating", rs.getDouble("averageRating"));
+                data.put("newAverageRating", rs.getString("newRating"));
+                data.put("title", rs.getString("title"));
+                data.put("numVotes", rs.getDouble("numVotes"));
+                list.add(data);
+            }
+            st.close();
+
+        } catch (Exception e) {
+            data = null;
+            System.out.println("retrieveTitleById ex "+e);
+            System.out.println("retrieveTitleById result set "+rs);
+        }
+        return list;
+
+    }
+    // TODO: make a list
+
+    /*
+
+
+    // New rating for a specifc show  or all shows with show title
+    with agg AS (select  episode.parentId AS showId, round(avg(rating.averageRating),2) AS newRating
+    from episode
+    join rating
+    on episode.id = rating.tconst
+    group by episode.parentId)
+    select showId, newRating, title, rating.averageRating, rating.numVotes
+    from agg
+    join title
+    on title.tconst = showId
+    join rating
+    on rating.tconst = showId
+    ;
+
+    * */
 
 }

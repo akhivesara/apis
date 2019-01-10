@@ -301,6 +301,11 @@ public class IMDBService {
         return db.calculateRatingById(id, new RatingDBValuator());
     }
 
+    public ArrayList<HashMap> calculateAllTitlesRating(String limit, String offset) {
+        MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
+        return db.calculateAllTitlesRating(new RatingDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+    }
+
     public ArrayList<ImDBBaseEntity> retrieveCastById(String id) {
         MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         return db.retrieveCastById(id, new PersonCategoryDBValuator());

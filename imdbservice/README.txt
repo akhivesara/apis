@@ -20,6 +20,9 @@ person/{id}
 
     Returns Person details
 
+lists/calculatedRatings
+    returns new calculated ratings
+
 lists/adultTitles
 
     Returns list of all adult movies
