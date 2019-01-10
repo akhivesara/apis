@@ -1,8 +1,12 @@
+import io.swagger.annotations.Api;
 import main.webapp.Service;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import javax.ws.rs.core.MediaType;
+
+@Api(value = "Imdb Api class", produces = MediaType.APPLICATION_JSON)
 public class MainService {
     public static void main(String[] args) throws Exception {
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);

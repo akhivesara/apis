@@ -2,6 +2,9 @@ package main.webapp;
 
 
 import com.google.gson.Gson;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import main.webapp.model.Rating;
 import main.webapp.model.Title;
 import main.webapp.model.credits.Person;
@@ -147,6 +150,8 @@ public class Service {
     @GET
     @Path("title/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation("Returns Title details")
+    @ApiResponses(value = {@ApiResponse(code = 200 , message = "OK", response = Title.class)})
     public Response titleDetails(@PathParam("id") String input) {
         //Logger.getLogger().info();
         Title title = IMDBService.getInstance().retrieveTitleById(input);
@@ -157,6 +162,7 @@ public class Service {
     @GET
     @Path("person/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation("Returns Person details")
     public Response personDetails(@PathParam("id") String input) {
         //Logger.getLogger().info();
         Person title = IMDBService.getInstance().retrievePersonById(input);
@@ -167,6 +173,7 @@ public class Service {
     @GET
     @Path("title/rating/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation("Returns Title ratings")
     public Response ratingDetails(@PathParam("id") String input) {
         Rating title = IMDBService.getInstance().retrieveRatingById(input);
         String employeeJsonString = new Gson().toJson(title);
@@ -176,6 +183,7 @@ public class Service {
     @GET
     @Path("title/calculaterating/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation("Returns recalculated details")
     public Response ratingRedone(@PathParam("id") String input) {
         HashMap title = IMDBService.getInstance().calculateRatingById(input);
         String employeeJsonString = new Gson().toJson(title);
@@ -185,6 +193,7 @@ public class Service {
     @GET
     @Path("title/cast/{id}")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation("Returns Title cast details")
     public Response castDetails(@PathParam("id") String input) {
         ArrayList<ImDBBaseEntity> titles = IMDBService.getInstance().retrieveCastById(input);
         HashMap attributes = new HashMap();
@@ -196,6 +205,7 @@ public class Service {
     @GET
     @Path("lists/calculatedRatings")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation("Returns List of all Titles with old and re-calculated ratings")
     public Response calculatedRatings(@QueryParam("limit") String limit, @QueryParam("offset") String offset) {
         ArrayList<HashMap> list = IMDBService.getInstance().calculateAllTitlesRating(limit, offset);
         HashMap attributes = new HashMap();
@@ -207,6 +217,7 @@ public class Service {
     @GET
     @Path("lists/adultTitles")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation("Returns List of all Adult Titles ")
     public Response adult(@QueryParam("limit") String limit, @QueryParam("offset") String offset) {
         ArrayList<ImDBBaseEntity> titles = IMDBService.getInstance().retrieveAdultTitles(limit, offset);
         HashMap attributes;
@@ -229,6 +240,7 @@ public class Service {
     //tvSpecial
     //video
     //videoGame
+    @ApiOperation("Returns List of all Titles particular type")
     public Response titlesByType(@PathParam("type") String input, @QueryParam("limit") String limit, @QueryParam("offset") String offset) {
         ArrayList<HashMap> titles = IMDBService.getInstance().retrieveListOfTitlesByType(input, limit, offset);
         HashMap attributes;
@@ -277,6 +289,7 @@ public class Service {
     @GET
     @Path("lists/genre/{genre}")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation("Returns List of all Titles particular genre")
     public Response titlesByGenre(@PathParam("genre") String input, @QueryParam("limit") String limit, @QueryParam("offset") String offset) {
         //Logger.getLogger().info();
         ArrayList<HashMap> titles = IMDBService.getInstance().retrieveListOfTitlesByGenre(input, limit, offset);
@@ -296,6 +309,8 @@ public class Service {
     @GET
     @Path("search/{query}")
     @Produces(MediaType.APPLICATION_JSON)
+    @ApiOperation("Search for matching titles or people")
+    @ApiResponses(value = {@ApiResponse(code = 200 , message = "OK")})
     public Response search(@PathParam("query") String input, @QueryParam("type") String type, @QueryParam("limit") String limit, @QueryParam("offset") String offset) {
         //Logger.getLogger().info();
         ArrayList<HashMap> titles = null;
