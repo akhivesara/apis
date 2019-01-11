@@ -17,6 +17,9 @@ USE `nflxtakehome`;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+CREATE USER 'nflxtakehome'@'localhost' IDENTIFIED BY 'nflxtakehome';
+
+GRANT ALL PRIVILEGES ON nflxtakehome.* TO 'nflxtakehome'@'localhost';
 --
 -- Table structure for table `cast_title`
 --
