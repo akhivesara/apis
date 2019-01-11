@@ -4,11 +4,9 @@
 
 # Database Setup Instructions 
 
-
-
 #REST APIS:
 
-All APIs accept limit and offset query params
+
 
 title/{id}
 
@@ -24,6 +22,8 @@ title/cast/{id}
 person/{id}
 
     Returns Person details
+
+All LIST APIs accept limit and offset query params
 
 lists/calculatedRatings
     returns new calculated ratings

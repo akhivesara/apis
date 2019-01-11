@@ -20,13 +20,11 @@ import java.util.Map;
 
 public class IMDBService {
 
-    private static String LOCAL_DB_PATH  = "jdbc:mysql://localhost/nflxtakehome";
-    private static String LOCAL_DB_USER = "nflxtakehome";
-    private static String LOCAL_DB_PWD = "nflxtakehome";
-
     private static MySQLStore mySQLStore;
-    private IMDBService(){}
-
+    private IMDBService(){
+        config = new IMDBConfig().build();
+    }
+    private static IMDBConfig config;
     private static class SingletonHelper{
         private static final IMDBService INSTANCE = new IMDBService();
     }
@@ -38,7 +36,7 @@ public class IMDBService {
     // worry about multi-thread?
     private static MySQLStore getMySQLStore() {
         if (mySQLStore == null) {
-            mySQLStore = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
+            mySQLStore = MySQLStore.getInstance(config.getValue(IMDBConfig.IMDBConfigKeys.DB_PATH), config.getValue(IMDBConfig.IMDBConfigKeys.DB_USER), config.getValue(IMDBConfig.IMDBConfigKeys.DB_PASSWORD));
         }
         return mySQLStore;
     }
@@ -49,7 +47,6 @@ public class IMDBService {
             2. save file
             3. populate db
          */
-
         ArrayList<ImDBBaseEntity> ratings = fetchAndSaveByIdentifierAndClass(ImdbUtils.RATINGS_IDENTIFIER, Rating.class);
         try {
             getMySQLStore().populateUsingBatchInsert(ratings, 0, new RatingDBValuator());
@@ -66,14 +63,12 @@ public class IMDBService {
             2. save file
             3. populate db
          */
-
         ArrayList<ImDBBaseEntity> episodes = fetchAndSaveByIdentifierAndClass(ImdbUtils.EPISODES_IDENTIFIER, Episode.class);
         try {
             getMySQLStore().populateUsingBatchInsert(episodes, 0, new EpisodeDBValuator());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 
@@ -83,7 +78,6 @@ public class IMDBService {
             2. save file
             3. populate db
          */
-
         FileDownloader.downloadIfNeeded(identifier);
         return readLinesAndStoreInClassType(PathUtils.getLocalFinalPath(identifier), type);
     }

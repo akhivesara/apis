@@ -11,6 +11,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Implementation for MySQL
+ */
 public class MySQLStore {
 
     private final String url;
