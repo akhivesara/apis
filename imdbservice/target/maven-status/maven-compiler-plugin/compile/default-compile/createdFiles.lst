@@ -17,7 +17,6 @@ com/imdb/model/IMDBBaseEntity.class
 com/imdb/model/credits/Editor.class
 com/imdb/dbvaluator/AbstractDBValuator.class
 com/imdb/IMDBConfig$1.class
-com/imdb/model/credits/Crew.class
 com/imdb/model/credits/PersonCategory.class
 com/imdb/model/credits/Producer.class
 com/imdb/model/credits/Actor.class

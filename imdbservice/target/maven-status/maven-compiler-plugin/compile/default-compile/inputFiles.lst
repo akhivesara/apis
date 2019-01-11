@@ -32,6 +32,5 @@
 /Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/model/credits/Composer.java
 /Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/databaseimpl/MySQLStore.java
 /Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/model/Rating.java
-/Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/model/credits/Crew.java
 /Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/model/credits/Actor.java
 /Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/model/Title.java
