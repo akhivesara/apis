@@ -91,6 +91,10 @@
 # Java Docs
 [Docs](docs/index.html)
 
+# Gotcha
+IMDB data integrity issues. Titles and People missing from the primary dataset. This leads to issues populating the DB, since we have foreign key relationship. 
+DB could have been designed without foreign key relationship, but for the purpose if this exercise, we just drop the missing data.
+
 ### Future Work (due to time constraint) 
 
 #### 1. API To Build:
