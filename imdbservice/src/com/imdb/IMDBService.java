@@ -21,10 +21,9 @@ import java.util.Map;
 public class IMDBService {
 
     private static MySQLStore mySQLStore;
-    private IMDBService(){
-        config = new IMDBConfig().build();
-    }
-    private static IMDBConfig config;
+
+    private IMDBService() {}
+
     private static class SingletonHelper{
         private static final IMDBService INSTANCE = new IMDBService();
     }
@@ -36,6 +35,7 @@ public class IMDBService {
     // worry about multi-thread?
     private static MySQLStore getMySQLStore() {
         if (mySQLStore == null) {
+            IMDBConfig config = IMDBConfig.getInstance();
             mySQLStore = MySQLStore.getInstance(config.getValue(IMDBConfig.IMDBConfigKeys.DB_PATH), config.getValue(IMDBConfig.IMDBConfigKeys.DB_USER), config.getValue(IMDBConfig.IMDBConfigKeys.DB_PASSWORD));
         }
         return mySQLStore;
@@ -53,9 +53,7 @@ public class IMDBService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
 
     public void fetchAndSaveEpisodes() {
         /*
@@ -71,14 +69,13 @@ public class IMDBService {
         }
     }
 
-
     public ArrayList<ImDBBaseEntity> fetchAndSaveByIdentifierAndClass(String identifier, Class type) {
         /*
             1. Download file/s
             2. save file
             3. populate db
          */
-        FileDownloader.downloadIfNeeded(identifier);
+        FileDownloader.downloadIfNeeded(identifier, false);
         return readLinesAndStoreInClassType(PathUtils.getLocalFinalPath(identifier), type);
     }
 
@@ -160,7 +157,6 @@ public class IMDBService {
             HashMap<String, String> lineMap;
             HashMap<String, String> commaValueLineMap;
             String[] commaValues = new String[] {};
-            ArrayList<Map> dataList = new ArrayList<>();
             ArrayList<ImDBBaseEntity> dataListIMDBObject = new ArrayList<>();
 
             Constructor<?> cons = type.getConstructor(HashMap.class);
@@ -172,7 +168,6 @@ public class IMDBService {
                 lineMap = new HashMap<>();
 
                 if(lineJustFetched == null) {
-                    //lineCount = 0;
                     break;
                 }else{
                     lineCount++;

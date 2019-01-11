@@ -1,11 +1,14 @@
 # Design
 
-### EER Diagram  ![adsf](db.png)
+### EER Diagram  ![database diagram](db.png)
 
-# Database Setup Instructions 
+# Database Setup Instructions
+If using MySQL Workbench import init_database.sql
+TODO: Write a bash script that creates and populates the database  
+
+#### Approach:
 
 #REST APIS SUPPORTED:
-
 
 ###title/{id} 
 ***Rest API: To fetch title data***
@@ -57,7 +60,9 @@
     "timestamp": "01/07/2019 14:10:12.040"
 
 ---
-###TODO STUBS:
+###TODO 
+
+####1. API STUBS:
 
 ###lists/genre/{genre}/{role}/{cast_id}
 ***Rest API: To fetch a list of all titles of a genre where a person is in a particular role/category (i.e director or actor, etc..)***
@@ -72,6 +77,10 @@ eg. lists/drama/tvSeries/actor/12345
 
 ---
 ###lists/cast/{cast_id}
-*** Rest API: All titles a particular person has a role in***
+***Rest API: All titles a particular person has a role in***
 
 ---
+
+####2. Better logger using tags, log levels
+
+####3.   

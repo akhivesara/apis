@@ -1,25 +1,28 @@
 package com.imdb.util;
 
+import com.imdb.IMDBConfig;
+
 public class PathUtils {
 
-    static String IMDB_BASE_PATH = "https://datasets.imdbws.com/";
+    static {
+        config = IMDBConfig.getInstance();
+    }
+
+    private static IMDBConfig config;
+
     static String GZIP_EXTENTION = ".tsv.gz";
     static String GZIP_CP_EXTENTION = "-gzip-cp.txt";
     static String ENCODED_EXTENTION = "-encoded.txt";
-    static String USER_BASE = "/Users/ashishkhivesara/Documents/";
-
-
-    //https://datasets.imdbws.com/title.crew.tsv.gz
 
     public static String getImdbURI(String identifier) {
-        return IMDB_BASE_PATH + identifier + GZIP_EXTENTION;
+        return config.getValue(IMDBConfig.IMDBConfigKeys.IMDB_BASE_PATH) + identifier + GZIP_EXTENTION;
     }
 
     public static String getLocalCopyPath(String identifier) {
-        return USER_BASE + identifier + GZIP_CP_EXTENTION;
+        return config.getValue(IMDBConfig.IMDBConfigKeys.USER_BASE_PATH) + identifier + GZIP_CP_EXTENTION;
     }
 
     public static String getLocalFinalPath(String identifier) {
-        return USER_BASE + identifier + ENCODED_EXTENTION;
+        return config.getValue(IMDBConfig.IMDBConfigKeys.USER_BASE_PATH) + identifier + ENCODED_EXTENTION;
     }
 }

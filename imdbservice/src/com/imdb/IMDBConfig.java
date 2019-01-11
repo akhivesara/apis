@@ -6,10 +6,20 @@ import java.util.Properties;
 
 public class IMDBConfig {
 
+    private static class SingletonHelper{
+        private static final IMDBConfig INSTANCE = new IMDBConfig();
+    }
+
+    public static IMDBConfig getInstance(){
+        return SingletonHelper.INSTANCE;
+    }
+
     public enum IMDBConfigKeys {
+        IMDB_BASE_PATH("imdbbasepath"),
+        DB_PATH("database"),
         DB_USER("dbuser"),
         DB_PASSWORD("dbpassword"),
-        DB_PATH("database");
+        USER_BASE_PATH("userbasepath");
 
         private final String configKeys;
 
@@ -24,7 +34,9 @@ public class IMDBConfig {
     }
 
     private Properties properties;
-    public IMDBConfig() {}
+    private IMDBConfig() {
+        build();
+    }
 
     public IMDBConfig build() {
 

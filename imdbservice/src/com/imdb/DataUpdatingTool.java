@@ -8,27 +8,19 @@ import java.util.Arrays;
 public class DataUpdatingTool {
     public static void main(String[] args) throws Exception {
         // package as a jar with dependencies
-
         // maven plugin to package jar with dependency copied
-
         // manifest by pointing the main class
-//        String dbUrl = args[0];
-//        String user = args[1];
-//        String pwd = args[2];
-
-        IMDBService.getInstance().fetchAndSaveRatings();
+        fetchAndPopulate("all");
     }
 
     public static void fetchAndPopulate(String input) {
-
-            /*
+        /*
         1. Download file/s
         2. save file
         3. populate db
         */
         switch (input) {
             case "title":
-                //TODO Multiple files
                 IMDBService.getInstance().fetchAndSaveTitles();
                 break;
             case "person":
