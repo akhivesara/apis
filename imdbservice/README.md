@@ -12,33 +12,42 @@
 6. `cd target/package`
 7. copy over config.properties to target/package `cp src/config.properties target/package`
 8. Edit the config.properties to update `userbasepath` 
-9. To populate database run: `java -Xms1024m -Xmx4096m -cp "imdbservice.jar:lib/*" com.imdb.DataUpdatingTool`  
-8. To run the rest server: `java -cp "imdbservice.jar:lib/*" com.imdb.MainService`
-10. You can now run try all of the below APIs
+9. To populate database run: `java -Xms1024m -Xmx4096m -cp "imdbservice.jar:lib/*" com.imdb.DataUpdatingTool`
+10. If you are running into errors in Step 9, you have 2 options
+    1. Keep running the above command but to speed up,  do individual files, i.e either title, person, 
+       episode, rating, genre, cast -by running: `java -Xms1024m -Xmx4096m -cp "imdbservice.jar:lib/*" com.imdb.DataUpdatingTool cast`
+    2. Import database with data. Follow steps 2 & 3, but used  `init_database_with_data.sql` instead            
+11. To run the rest server: `java -cp "imdbservice.jar:lib/*" com.imdb.MainService`
+12. You can now run try all of the below APIs
 
 #### Approach:
 
 # REST APIS SUPPORTED:
+* NOTE: *The TRY links will work only if you complete all above steps*
 
 ### title/{id} 
 ***Rest API: To fetch title data***
-[asds](http://akjsdkl)
+##### Try : [Title](http://localhost:8080/nflxstudio/title/tt0000003)
 
 ---
 ### title/rating/{id}
 ***Rest API: To fetch title ratings***
+##### Try : [Rating](http://localhost:8080/nflxstudio/title/rating/tt0164258)
 
 ---
-### title/calculatedrating{id}
+### title/calculatedrating/{id}
 ***Rest API: To fetch title rating, on re-calculation. Algorithm used is: average of all episode ratings for that show***
+##### Try : [New Rating](http://localhost:8080/nflxstudio/title/calculatedrating/tt0164258)
 
 ---
 ### title/cast/{id}
 ***Rest API: To fetch cast info for a title. Possible cast categories are PersonCategory***
+##### Try : [Cast](http://localhost:8080/nflxstudio/title/cast/tt0164258)
 
 ---
 ### person/{id}
 ***Rest API: To fetch person data***
+##### Try : [Person](http://localhost:8080/nflxstudio/title/nm5471631)
 
 ---
 
@@ -112,7 +121,7 @@ IMDBService, DataUpdatingTool will be instantiated with an instance of IDatabase
 MySQLStore will be that instance in this project 
 Now in theory, IMDBService can be instantiated by any other database implementation as well
 
-#### 6. Memory constraints during reading and populating database 
+#### 6. Optimized for Memory, CPU constraints during reading and populating database 
 
 #### 7. Database performance leading to delay in API response times 
      
