@@ -26,7 +26,7 @@ TODO: Write a bash script that creates and populates the database
 ***Rest API: To fetch cast info for a title. Possible cast categories are PersonCategory***
 
 ---
-###person/{id}
+### person/{id}
 ***Rest API: To fetch person data***
 
 ---
