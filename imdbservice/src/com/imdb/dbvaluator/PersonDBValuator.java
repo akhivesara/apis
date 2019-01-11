@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PersonDBValuator extends IDBValuator {
+public class PersonDBValuator extends AbstractDBValuator {
 
     public PersonDBValuator() {}
 

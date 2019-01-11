@@ -1,6 +1,6 @@
 package com.imdb.dbvaluator;
 
-import com.imdb.MySQLStore;
+import com.imdb.databaseimpl.MySQLStore;
 import com.imdb.model.ImDBBaseEntity;
 
 import java.sql.ResultSet;
@@ -9,16 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * IDBValuator is a abstract class. It is used for both populate
+ * AbstractDBValuator is a abstract class. It is used for both populate
  * and retrieval operations to & from the database table.
  * If say TITLE DB table needs to be populated. It will require a
  * corresponding, say {@link TitleDBValuator}
  * Populate operation is performed by
- * {@link MySQLStore#populateUsingBatchInsert(ArrayList, int, IDBValuator)}
+ * {@link MySQLStore#populateUsingBatchInsert(ArrayList, int, AbstractDBValuator)}
  * Retrieval operatrion is performed by
  * {@link MySQLStore} as well
  */
-public abstract class IDBValuator {
+public abstract class AbstractDBValuator {
 
     /**
      * @return    database table name
@@ -63,7 +63,7 @@ public abstract class IDBValuator {
     }
 
     /**
-     * Called before inserting into the database table, IDBValuator
+     * Called before inserting into the database table, AbstractDBValuator
      * can evaluate the entity and skip the insert if data is not valid
      * @param entity
      * @return      boolean

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GenreDBValuator extends IDBValuator {
+public class GenreDBValuator extends AbstractDBValuator {
 
     public GenreDBValuator() {}
 

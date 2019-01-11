@@ -1,5 +1,6 @@
 package com.imdb;
 
+import com.imdb.databaseimpl.MySQLStore;
 import com.imdb.dbvaluator.*;
 import com.imdb.model.Episode;
 import com.imdb.model.ImDBBaseEntity;
@@ -129,7 +130,7 @@ public class IMDBService {
         }
     }
 
-    private void fetchAndSaveDirectorOrWriter(IDBValuator valuator, Class type) {
+    private void fetchAndSaveDirectorOrWriter(AbstractDBValuator valuator, Class type) {
         System.out.println("fetchAndSaveDirectorOrWriter");
         ArrayList<ImDBBaseEntity>  crew = fetchAndSaveByIdentifierAndClass(ImdbUtils.TITLE_CREW_IDENTIFIER, type);
         getMySQLStore().populateUsingBatchInsert(crew, 0, valuator);
@@ -351,7 +352,7 @@ CREW LOGIC
         db.crewBatchInsert(tableNames, crew);
     }
 
-    private void fetchAndSaveCrewImplX(IDBValuator crewValuator, String identifier) {
+    private void fetchAndSaveCrewImplX(AbstractDBValuator crewValuator, String identifier) {
         System.out.println("fetchAndSaveCrewImplX");
         ArrayList<ImDBBaseEntity>  crew = fetchAndSaveByIdentifierAndClass(identifier, APersonCategory.class);
 

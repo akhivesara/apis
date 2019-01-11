@@ -245,7 +245,6 @@ public class RestfulService {
         return Response.ok(jsonString,MediaType.APPLICATION_JSON_TYPE).build();
     }
 
-
     /**
      * Rest API to download and populate DB. Dev purpose only
      * @param input

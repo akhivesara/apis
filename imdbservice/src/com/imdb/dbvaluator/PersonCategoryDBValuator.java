@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class PersonCategoryDBValuator extends IDBValuator {
+public class PersonCategoryDBValuator extends AbstractDBValuator {
 
     public PersonCategoryDBValuator() {}
 

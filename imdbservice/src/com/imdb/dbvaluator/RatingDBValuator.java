@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class RatingDBValuator extends IDBValuator {
+public class RatingDBValuator extends AbstractDBValuator {
 
     public RatingDBValuator(){}
 

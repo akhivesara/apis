@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DirectorDBValuator extends IDBValuator {
+public class DirectorDBValuator extends AbstractDBValuator {
 
 
     public DirectorDBValuator() {}

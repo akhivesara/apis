@@ -81,6 +81,16 @@ eg. lists/drama/tvSeries/actor/12345
 
 ---
 
+###title/{id}/episodes
+***Rest API: All episodes for a title***
+
+---
+
+
 ####2. Better logger using tags, log levels
 
-####3. Custom Response (decorated) objects, per resource, lists   
+####3. Custom Response (decorated) objects, per resource, lists
+
+####4. Bash script to create and populate db
+
+####5. Abstract design such that any other database can be plugged in. The idea for that support is implemented by adding Entity object (IMDBEntity) and AbstractDBValuator. So the remaining part is abstraction for MySQLStore     

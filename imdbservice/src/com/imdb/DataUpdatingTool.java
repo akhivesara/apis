@@ -1,5 +1,6 @@
 package com.imdb;
 
+import com.imdb.databaseimpl.MySQLStore;
 import com.imdb.util.ImdbUtils;
 
 import java.util.ArrayList;

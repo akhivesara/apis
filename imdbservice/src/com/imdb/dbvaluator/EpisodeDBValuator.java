@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class EpisodeDBValuator extends IDBValuator {
+public class EpisodeDBValuator extends AbstractDBValuator {
 
     public EpisodeDBValuator() {}
 

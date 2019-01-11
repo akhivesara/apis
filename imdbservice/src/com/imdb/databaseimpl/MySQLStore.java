@@ -1,7 +1,7 @@
-package com.imdb;
+package com.imdb.databaseimpl;
 
+import com.imdb.dbvaluator.AbstractDBValuator;
 import com.imdb.util.ImdbUtils;
-import com.imdb.dbvaluator.IDBValuator;
 import com.imdb.model.ImDBBaseEntity;
 
 import java.math.BigDecimal;
@@ -31,7 +31,7 @@ public class MySQLStore {
         return new MySQLStore(url, user, pwd);
     }
 
-    public void populateUsingBatchInsert(ArrayList<ImDBBaseEntity> dbBaseEntities, int startIndex, IDBValuator valuator) {
+    public void populateUsingBatchInsert(ArrayList<ImDBBaseEntity> dbBaseEntities, int startIndex, AbstractDBValuator valuator) {
 
         String tableName = valuator.getDBTable();
         System.out.println(" Start-- populateUsingBatchInsert for : "+tableName);
@@ -220,7 +220,7 @@ public class MySQLStore {
         }
     }
 
-    public void insertCrewTypeWithErrorHandlerX(IDBValuator crewValuator, ArrayList<ImDBBaseEntity> crew, int startCount) {
+    public void insertCrewTypeWithErrorHandlerX(AbstractDBValuator crewValuator, ArrayList<ImDBBaseEntity> crew, int startCount) {
         pseudoBatchInsert(crew, startCount, crewValuator);
     }
 
@@ -297,7 +297,7 @@ public class MySQLStore {
     }
     */
 
-    public ArrayList<ImDBBaseEntity> retrieveCastById(String id, IDBValuator dbValuator) {
+    public ArrayList<ImDBBaseEntity> retrieveCastById(String id, AbstractDBValuator dbValuator) {
 
         ArrayList<ImDBBaseEntity> data = new ArrayList<>(0);
         Connection connection = null;
@@ -332,7 +332,7 @@ public class MySQLStore {
         return data;
     }
 
-    public ImDBBaseEntity retrieveFromTableById(String id, IDBValuator dbValuator) {
+    public ImDBBaseEntity retrieveFromTableById(String id, AbstractDBValuator dbValuator) {
         Connection connection = null;
         ResultSet rs = null;
         try {
@@ -362,7 +362,7 @@ public class MySQLStore {
         return null;
     }
 
-    public ArrayList<ImDBBaseEntity> retrieveListOfTitles(String whereClause, String orderByClause, IDBValuator dbValuator, Integer limit, Integer offset) {
+    public ArrayList<ImDBBaseEntity> retrieveListOfTitles(String whereClause, String orderByClause, AbstractDBValuator dbValuator, Integer limit, Integer offset) {
         Connection connection = null;
         ResultSet rs = null;
         try {
@@ -406,7 +406,7 @@ public class MySQLStore {
     }
 
 
-    public HashMap calculateRatingById(String id, IDBValuator dbValuator) {
+    public HashMap calculateRatingById(String id, AbstractDBValuator dbValuator) {
         HashMap data = null;
         Connection connection = null;
         ResultSet rs = null;
@@ -444,7 +444,7 @@ public class MySQLStore {
         return data;
     }
 
-    public ArrayList<HashMap> calculateAllTitlesRating(IDBValuator dbValuator, Integer limit, Integer offset) {
+    public ArrayList<HashMap> calculateAllTitlesRating(AbstractDBValuator dbValuator, Integer limit, Integer offset) {
         ArrayList<HashMap> list = new ArrayList<>(0);
         HashMap data = null;
         Connection connection = null;
