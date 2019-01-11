@@ -1,1 +1,0 @@
-{"id":"tt0000003","title":"Pauvre Pierrot","titleType":"short","isAdult":false,"runtimeMinutes":4}
