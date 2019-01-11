@@ -4,6 +4,10 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Used to read properties off config.property. Exposes all possible property keys as {@link IMDBConfigKeys}
+ *
+ */
 public class IMDBConfig {
 
     private static class SingletonHelper{
@@ -14,6 +18,9 @@ public class IMDBConfig {
         return SingletonHelper.INSTANCE;
     }
 
+    /**
+     * Property Keys defined in config.properties file
+     */
     public enum IMDBConfigKeys {
         IMDB_BASE_PATH("imdbbasepath"),
         DB_PATH("database"),
@@ -33,20 +40,27 @@ public class IMDBConfig {
         }
     }
 
+    /**
+     * Getter for specific property values
+     * @param key   {@link IMDBConfigKeys}
+     * @return
+     */
+    public String getValue(IMDBConfigKeys key) {
+        return properties != null && key != null ? properties.getProperty(key.toString()) : null;
+    }
+
     private Properties properties;
+
     private IMDBConfig() {
         build();
     }
 
-    public IMDBConfig build() {
-
+    private IMDBConfig build() {
         properties = new Properties();
         InputStream input = null;
-
         try {
-
             input = new FileInputStream("config.properties");
-            // build a properties file
+            // build properties file
             properties.load(input);
 
         } catch (Exception ex) {
@@ -63,7 +77,4 @@ public class IMDBConfig {
         return this;
     }
 
-    public String getValue(IMDBConfigKeys key) {
-        return properties != null && key != null ? properties.getProperty(key.toString()) : null;
-    }
 }

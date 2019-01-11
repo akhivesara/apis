@@ -305,13 +305,13 @@ public class MySQLStore {
         try {
             connection = DriverManager.getConnection(url, user, pwd);
 
-            String sql = "select title, primaryName, category , title.tconst, person.nconst" +
-                    " from " + ImdbUtils.TITLE_DB_TABLE_NAME +
-                    " join " + ImdbUtils.CAST_DB_TABLE_NAME +
-                    " on "+ImdbUtils.TITLE_DB_TABLE_NAME+".tconst = "+ImdbUtils.CAST_DB_TABLE_NAME+".tconst" +
-                    " join " + ImdbUtils.PERSON_DB_TABLE_NAME +
-                    " on "+ImdbUtils.CAST_DB_TABLE_NAME+".nconst = "+ImdbUtils.PERSON_DB_TABLE_NAME+".nconst" +
-                    " where "+ ImdbUtils.TITLE_DB_TABLE_NAME +".tconst='"+ id +"'";
+            String sql = "SELECT title, primaryName, category , title.tconst, person.nconst" +
+                    " FROM " + ImdbUtils.TITLE_DB_TABLE_NAME +
+                    " JOIN " + ImdbUtils.CAST_DB_TABLE_NAME +
+                    " ON "+ImdbUtils.TITLE_DB_TABLE_NAME+".tconst = "+ImdbUtils.CAST_DB_TABLE_NAME+".tconst" +
+                    " JOIN " + ImdbUtils.PERSON_DB_TABLE_NAME +
+                    " ON "+ImdbUtils.CAST_DB_TABLE_NAME+".nconst = "+ImdbUtils.PERSON_DB_TABLE_NAME+".nconst" +
+                    " WHERE "+ ImdbUtils.TITLE_DB_TABLE_NAME +".tconst='"+ id +"'";
 
             // create the java statement
             Statement st = connection.createStatement();
@@ -405,38 +405,6 @@ public class MySQLStore {
         return null;
     }
 
-    // default limit=0 --> no limit offset=0
-    public ArrayList<ImDBBaseEntity> retrieveListOfTitles(String whereClause, IDBValuator dbValuator) {
-        Connection connection = null;
-        ResultSet rs = null;
-        try {
-            connection = DriverManager.getConnection(url, user, pwd);
-
-            //dbValuator.validateRetrieveInputs();
-            String sql = "SELECT * FROM " + dbValuator.getDBTable() + " " + whereClause;
-
-            // create the java statement
-            Statement st = connection.createStatement();
-
-            // populate the query, and get a java resultset
-            rs = st.executeQuery(sql);
-
-            // iterate through the java resultset
-            ArrayList<ImDBBaseEntity> l = new ArrayList<>(0);
-
-            while (rs.next()) {
-                ImDBBaseEntity title = dbValuator.retrieve(rs);
-                l.add(title);
-            }
-            st.close();
-            return l;
-
-        } catch (Exception e) {
-            System.out.println("retrieveTitleById ex "+e);
-            System.out.println("retrieveTitleById result set "+rs);
-        }
-        return null;
-    }
 
     public HashMap calculateRatingById(String id, IDBValuator dbValuator) {
         HashMap data = null;
@@ -485,16 +453,16 @@ public class MySQLStore {
             connection = DriverManager.getConnection(url, user, pwd);
 
             // our SQL SELECT query.
-            String sql = "with aggregate AS (select episode.parentId AS showId, round(avg(rating.averageRating),2) AS newRating" +
-                    " from episode" +
-                    " join rating" +
-                    " on episode.id = rating.tconst" +
-                    " group by episode.parentId)" +
-                    " select * from aggregate" +
-                    " join title" +
-                    " on title.tconst = showId" +
-                    " join rating" +
-                    " on rating.tconst = showId"
+            String sql = "WITH aggregate AS (select episode.parentId AS showId, round(avg(rating.averageRating),2) AS newRating" +
+                    " FROM episode" +
+                    " JOIN rating" +
+                    " ON episode.id = rating.tconst" +
+                    " GROUP by episode.parentId)" +
+                    " SELECT * from aggregate" +
+                    " JOIN title" +
+                    " ON title.tconst = showId" +
+                    " JOIN rating" +
+                    " ON rating.tconst = showId"
                     ;
 
             if (limit != null) {

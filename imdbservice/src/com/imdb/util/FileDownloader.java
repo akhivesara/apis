@@ -1,6 +1,4 @@
-package com.imdb;
-
-import com.imdb.util.PathUtils;
+package com.imdb.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -47,7 +45,6 @@ public class FileDownloader {
 
     private static void download(String fileName, String outName, String decodeName) {
         try {
-
             // Copy gzipped File
             InputStream inputStream = new URL(fileName).openStream();
             Files.copy(inputStream, Paths.get(outName), StandardCopyOption.REPLACE_EXISTING);

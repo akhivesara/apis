@@ -83,4 +83,4 @@ eg. lists/drama/tvSeries/actor/12345
 
 ####2. Better logger using tags, log levels
 
-####3.   
+####3. Custom Response (decorated) objects, per resource, lists   

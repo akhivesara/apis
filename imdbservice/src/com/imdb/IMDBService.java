@@ -6,6 +6,7 @@ import com.imdb.model.ImDBBaseEntity;
 import com.imdb.model.Rating;
 import com.imdb.model.Title;
 import com.imdb.model.credits.*;
+import com.imdb.util.FileDownloader;
 import com.imdb.util.ImdbUtils;
 import com.imdb.util.PathUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -16,7 +17,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class IMDBService {
 
