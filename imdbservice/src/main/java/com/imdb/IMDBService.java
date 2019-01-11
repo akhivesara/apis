@@ -190,42 +190,7 @@ public class IMDBService {
                             each = null;
                         }
 
-                        // for crew only
-                        Boolean isCrew = type.getCanonicalName().equals(Crew.class.getCanonicalName());
-
-
-                        commaValues = isCrew  && each != null ? each.split(",") : new String[] {};
-                        // 1 a  b
-                        // crew with t=1 d=a w=b
-                        // 2 c,d    e
-                        // crew with t=2 d=c
-                        // crew with t=2 d=d
-                        // crew with t=2 w=e
-                        // 3 f,g    h,i
-                        if (isCrew && commaValues.length > 1) {
-                            commaValueLineMap = new HashMap<>();
-                            for (int c = 0; c < commaValues.length; c++) {
-                                //words.add(commaValues[c]);
-
-                                // build base object
-                                commaValueLineMap.put(keysArray[0],lineMap.get(keysArray[0]));
-                                commaValueLineMap.put(keysArray[i],commaValues[c]);
-
-
-//                                Constructor<?> cons = type.getConstructor(HashMap.class);
-                                object = cons.newInstance(commaValueLineMap);
-
-                                dataListIMDBObject.add((IMDBBaseEntity)object);
-
-
-                            }
-
-                        } else {
-
-                            //words.add(each);
-                            lineMap.put(keysArray[i], each);
-
-                        }
+                        lineMap.put(keysArray[i], each);
                     }
 
                     // if CAST find the actual class to instantiate OR introduce a base class
@@ -237,7 +202,7 @@ public class IMDBService {
                         object = resolvedCons.newInstance(lineMap);
 
                         dataListIMDBObject.add((IMDBBaseEntity) object);
-                    } else if (commaValues.length <= 1 && lineMap.keySet().size() > 1) {
+                    } else if (lineMap.keySet().size() > 1) {
                         object = cons.newInstance(lineMap);
                         dataListIMDBObject.add((IMDBBaseEntity) object);
                     }

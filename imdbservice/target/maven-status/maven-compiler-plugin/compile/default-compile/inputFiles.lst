@@ -3,7 +3,6 @@
 /Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/dbvaluator/RatingDBValuator.java
 /Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/model/credits/Cinematographer.java
 /Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/dbvaluator/AbstractDBValuator.java
-/Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/databaseimpl/IDatabaseImpl.java
 /Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/model/credits/Editor.java
 /Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/model/credits/Actress.java
 /Users/ashishkhivesara/github/apis/imdbservice/src/main/java/com/imdb/model/credits/Self.java

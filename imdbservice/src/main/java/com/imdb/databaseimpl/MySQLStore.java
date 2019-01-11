@@ -58,7 +58,7 @@ public class MySQLStore {
             connection = DriverManager.getConnection(url, user, pwd);
             ps = connection.prepareStatement(sql);
 
-            for (entityIndex = startIndex; entityIndex < dbBaseEntities.size() * .1; entityIndex++) {
+            for (entityIndex = startIndex; entityIndex < dbBaseEntities.size() ; entityIndex++) {
 
                 dbBaseEntity = dbBaseEntities.get(entityIndex);
 
@@ -175,91 +175,6 @@ public class MySQLStore {
         }
 
     }
-
-    /*
-      // CREW LOGIC
-    public void crewBatchInsert(String[] tableNames, ArrayList<IMDBBaseEntity> crew) {
-        for (String tableName: tableNames) {
-            insertCrewTypeWithErrorHandler(tableName, crew, 0);
-        }
-    }
-
-    public void insertCrewTypeWithErrorHandlerX(AbstractDBValuator crewValuator, ArrayList<IMDBBaseEntity> crew, int startCount) {
-        pseudoBatchInsert(crew, startCount, crewValuator);
-    }
-
-    // recursive error handler
-    private void insertCrewTypeWithErrorHandler(String tableName, ArrayList<IMDBBaseEntity> crew, int startCount) {
-        //try {
-        Connection connection = null;
-        Crew cr = null;
-        PreparedStatement ps = null;
-        final int batchSize = 1;
-        int count = 0;
-        int crewCount=0;
-
-
-        // per table
-        //for (String table : tableNames) {
-        String sql = "INSERT INTO " + tableName + " (tconst,nconst) values (?, ?) ON DUPLICATE KEY UPDATE tconst=?";
-
-        try {
-            connection = DriverManager.getConnection(url, user, pwd);
-            ps = connection.prepareStatement(sql);
-
-
-            for (crewCount=startCount ; crewCount < crew.size(); crewCount++) {
-
-                cr = (Crew) crew.get(crewCount);
-                ps.setString(1, cr.getTitleId());
-                // hack for now
-                String crewId;
-                if (tableName.equals(ImdbUtils.DIRECTOR_DB_TABLE_NAME)) {
-                    crewId = cr.getDirector().getId();
-                    //ps.setString(2, cr.getDirector().getId());
-                } else {
-                    crewId = cr.getWriter().getId();
-                    //ps.setString(2, cr.getWriter().getId());
-                }
-                if (crewId == null) {
-                    continue;
-                }
-                ps.setString(2, crewId);
-                ps.setString(3, cr.getTitleId());
-
-                ps.addBatch();
-
-                if (++count % batchSize == 0) {
-
-                    ps.executeBatch();
-                }
-            }
-            ps.executeBatch(); // insert remaining records
-            ps.close();
-            connection.close();
-        } catch(Exception e){
-            try {
-                if (ps != null) {
-                    ps.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            }catch (Exception ex) {
-              ex.printStackTrace();
-            }
-            if (e instanceof BatchUpdateException) {
-                System.out.println("BatchUpdateException: PS " +ps);
-                System.out.println("BatchUpdateException: crewCount count = " + crewCount);
-                System.out.println("BatchUpdateException: Crew = " + cr);
-            }
-            if (crewCount > 0 && crew != null && (crewCount + 1) < crew.size()) {
-                insertCrewTypeWithErrorHandler(tableName, crew, crewCount + 1);
-            }
-            System.out.println(" Done-- insertCrewTypeWithErrorHandler");
-        }
-    }
-    */
 
     public ArrayList<IMDBBaseEntity> retrieveCastById(String id, AbstractDBValuator dbValuator) {
 

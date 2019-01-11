@@ -36,7 +36,6 @@ com/imdb/dbvaluator/RatingDBValuator.class
 com/imdb/model/credits/Writer.class
 com/imdb/IMDBService$SingletonHelper.class
 com/imdb/model/Episode.class
-com/imdb/databaseimpl/IDatabaseImpl.class
 com/imdb/databaseimpl/MySQLStore.class
 com/imdb/model/Title.class
 com/imdb/model/Rating.class

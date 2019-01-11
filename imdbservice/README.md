@@ -2,9 +2,19 @@
 
 ### EER Diagram  ![database diagram](db.png)
 
-# Database Setup Instructions
-If using MySQL Workbench import init_database.sql
-TODO: Write a bash script that creates and populates the database  
+# Setup Instructions
+
+1. Download & Install mysql
+2. On terminal execute `mysql -uroot -p` (enter your root mysql password) 
+3. Use script init_database.sql to set up database schema. `source /Users/...{full_path}/init_database.sql`
+4. clone project from [github](https://github.com/akhivesara/apis/tree/master/imdbservice) 
+5. cd to project root, `cd imdbservice` and  `mvn clean package`
+6. `cd target/package`
+7. copy over config.properties to target/package `cp src/config.properties target/package`
+8. Edit the config.properties to update `userbasepath` 
+9. To populate database run: `java -Xms1024m -Xmx4096m -cp "imdbservice.jar:lib/*" com.imdb.DataUpdatingTool`  
+8. To run the rest server: `java -cp "imdbservice.jar:lib/*" com.imdb.MainService`
+10. You can now run try all of the below APIs
 
 #### Approach:
 
@@ -12,6 +22,7 @@ TODO: Write a bash script that creates and populates the database
 
 ### title/{id} 
 ***Rest API: To fetch title data***
+[asds](http://akjsdkl)
 
 ---
 ### title/rating/{id}
@@ -35,11 +46,6 @@ TODO: Write a bash script that creates and populates the database
 ## All *list* rest apis accept limit and offset query params to support pagination
 
 ---
-
-### lists/titles/calculatedratings
-***Rest API: To fetch a list of ratings for all titles that includes both ratings re-calculated and old ratings. Re-calculation Algorithm used is: average of all episode ratings for that show***
-
----
 ### lists/titles/adultTitles
 ***Rest API: To fetch a list of all adult titles on the service.***
 
@@ -59,6 +65,12 @@ TODO: Write a bash script that creates and populates the database
     "title": {list:[...], ...},
     "people":{list:[...], ...},
     "timestamp": "01/07/2019 14:10:12.040"
+
+---
+
+### lists/titles/calculatedratings
+***Rest API: To fetch a list of ratings for all titles that includes both ratings re-calculated and old ratings. Re-calculation Algorithm used is: average of all episode ratings for that show***
+
 
 ---
 ### Future Work 
@@ -92,10 +104,15 @@ TODO: Write a bash script that creates and populates the database
 
 #### 4. Bash script to create and populate db
 
-#### 5. Abstract design so that any other database can be plugged in. The idea for that support is in some way already in there, due to the Entity object (IMDBEntity) and AbstractDBValuator. So the remaining part is abstraction layer for MySQLStore. 
+#### 5. Abstract design so that any other database can be plugged in. So the remaining part is abstraction layer for MySQLStore. 
 Here is how it could happen
 MySQLStore will implement an IDatabaseImpl
 IDatabaseImpl will have methods to populate, retrieve, delete, close connection, so forth
-IMDBService, DataUpdatingTool will be instantiated with a IDatabaseImpl
-Now in theory, IMDBService can be instantiated by any other database implementation
+IMDBService, DataUpdatingTool will be instantiated with an instance of IDatabaseImpl. 
+MySQLStore will be that instance in this project 
+Now in theory, IMDBService can be instantiated by any other database implementation as well
+
+#### 6. Memory constraints during reading and populating database 
+
+#### 7. Database performance leading to delay in API response times 
      

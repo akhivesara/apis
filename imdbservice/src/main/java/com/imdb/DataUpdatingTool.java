@@ -11,7 +11,8 @@ public class DataUpdatingTool {
         // package as a jar with dependencies
         // maven plugin to package jar with dependency copied
         // manifest by pointing the main class
-        fetchAndPopulate("all");
+        String input = args != null && args.length > 0 ? args[0] : "all";
+        fetchAndPopulate(input);
     }
 
     public static void fetchAndPopulate(String input) {
@@ -49,8 +50,8 @@ public class DataUpdatingTool {
                 IMDBService.getInstance().fetchAndSaveTitles();
                 IMDBService.getInstance().fetchAndSavePersons();
                 IMDBService.getInstance().fetchAndSaveEpisodes();
-                IMDBService.getInstance().fetchAndSaveCast();
                 IMDBService.getInstance().fetchAndSaveRatings();
+                IMDBService.getInstance().fetchAndSaveCast();
                 IMDBService.getInstance().fetchAndSaveGenres();
                 IMDBService.getInstance().fetchAndSaveDirector();
                 IMDBService.getInstance().fetchAndSaveWriter();
