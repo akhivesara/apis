@@ -16,7 +16,7 @@
 10. If you are running into errors in Step 9, you have 2 options
     1. Keep running the above command but to speed up,  do individual files, i.e either title, person, 
        episode, rating, genre, cast -by running: `java -Xms1024m -Xmx4096m -cp "imdbservice.jar:lib/*" com.imdb.DataUpdatingTool cast`
-    2. Import database with data. Follow steps 2 & 3, but used  `init_database_with_data.sql` instead. Find it here [link](https://drive.google.com/drive/u/0/folders/1jiVNJaux7YASfHcH8ckyEeOebcMNnKjW)            
+    2. Import database with data. Follow steps 2 & 3, but used  `init_database_with_data.sql` instead. Find it here [link](https://www.dropbox.com/sh/xdtm8vtbclgzhwm/AAB6p03kLweMC6GgE5dfQlcva?dl=0)            
 11. To run the rest server: `java -cp "imdbservice.jar:lib/*" com.imdb.MainService`
 12. You can now run try all of the below APIs
 
