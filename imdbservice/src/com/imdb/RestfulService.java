@@ -18,26 +18,6 @@ import java.util.HashMap;
 @Path("nflxstudio")
 public class RestfulService {
 
-    @GET
-    @Path("downloadfile")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String download(@QueryParam("file") String input) {
-        DataUpdatingTool.fetchAndPopulate(input);
-        return "File and DB for "+input +" complete";
-    }
-
-
-    @GET
-    @Path("deletefile")
-    @Produces(MediaType.APPLICATION_JSON)
-    /*
-      Used to delete database table. For dev purpose only
-     */
-    public String delete(@QueryParam("file") String input) {
-        DataUpdatingTool.deleteEntriesInTable(input);
-        return "DB delete for "+input +" complete";
-    }
-
     /**
      * Rest API: To fetch title data
      * @path {id}     title ID
@@ -87,7 +67,7 @@ public class RestfulService {
      * @return
      */
     @GET
-    @Path("title/calculaterating/{id}")
+    @Path("title/calculatedrating/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response ratingRedone(@PathParam("id") String input) {
         HashMap title = IMDBService.getInstance().calculateRatingById(input);
@@ -263,5 +243,31 @@ public class RestfulService {
             jsonString = new Gson().toJson(ResponseUtil.listDecorator(null,attributes));
         }
         return Response.ok(jsonString,MediaType.APPLICATION_JSON_TYPE).build();
+    }
+
+
+    /**
+     * Rest API to download and populate DB. Dev purpose only
+     * @param input
+     * @return
+     */
+    @GET
+    @Path("downloadfile")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String download(@QueryParam("file") String input) {
+        DataUpdatingTool.fetchAndPopulate(input);
+        return "File and DB for "+input +" complete";
+    }
+
+
+    @GET
+    @Path("deletefile")
+    @Produces(MediaType.APPLICATION_JSON)
+    /*
+      Used to delete database table. For dev purpose only
+     */
+    public String delete(@QueryParam("file") String input) {
+        DataUpdatingTool.deleteEntriesInTable(input);
+        return "DB delete for "+input +" complete";
     }
 }

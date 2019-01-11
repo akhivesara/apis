@@ -4,60 +4,74 @@
 
 # Database Setup Instructions 
 
-#REST APIS:
+#REST APIS SUPPORTED:
 
 
+###title/{id} 
+***Rest API: To fetch title data***
 
-title/{id}
+---
+###title/rating/{id}
+***Rest API: To fetch title ratings***
 
-    Returns Title details
+---
+###title/calculatedrating{id}
+***Rest API: To fetch title rating, on re-calculation. Algorithm used is: average of all episode ratings for that show***
 
-title/rating/{id}
+---
+###title/cast/{id}
+***Rest API: To fetch cast info for a title. Possible cast categories are PersonCategory***
 
-    Returns Title ratings
+---
+###person/{id}
 
-title/cast/{id}
-    Return Title Casts
+***Rest API: To fetch person data***
 
-person/{id}
+---
+---
+##All *list* rest apis accept limit and offset query params to support pagination
+---
 
-    Returns Person details
+###lists/calculatedRatings
+***Rest API: To fetch a list of ratings for all titles that includes both ratings re-calculated and old ratings. Re-calculation Algorithm used is: average of all episode ratings for that show***
 
-All LIST APIs accept limit and offset query params
+---
+###lists/adultTitles
+***Rest API: To fetch a list of all adult titles on the service.***
 
-lists/calculatedRatings
-    returns new calculated ratings
+---
+###lists/type/{type}
+***Rest API: To fetch a list of all titles of type. Possible values { short |movie |tvMovie |tvSeries |tvEpisode |tvShort |tvMiniSeries |tvSpecial |video |videoGame }***
 
-lists/adultTitles
+---
+###lists/genre/{genre}
+***Rest API: To fetch a list of all titles of specified genre. Possible values for genre are { Documentary |Short |Animation |Comedy |Romance |Sport |News |Drama |Fantasy |Horror |Biography |Music |War |Crime |Western |Family |Adventure |History |Sci-Fi |Action |Mystery |Thriller |Musical |Film-Noir |Game-Show |Talk-Show |Reality-TV |Adult }***
 
-    Returns list of all adult movies
-
-lists/type/{type}
-
-    Returns list of all movies of type in the path, e.x. short, movie, etc..
-
-lists/genre/{genre}
-
-    Returns list of all movies of genre in the path, e.x. Drama, Crime, etc..
-
-search/{query}
-
-    Returns both list titles & people returned
+---
+###search/{query}
+***Rest API: Search. Currently Supports Title and People. Implementation performs partial word match provided word begins with the query. Support filtering by query param type. if type=person returns only people, if type=title returns only title. default if no type returns both. limit: page size for pagination support. default is set at 100. offset: offset for pagination support***
 
     "search": "brad",
     "title": {list:[...], ...},
     "people":{list:[...], ...},
     "timestamp": "01/07/2019 14:10:12.040"
 
-Supports filtering by
-if type query param has type=person, type=title
+---
+###TODO STUBS:
 
+###lists/genre/{genre}/{role}/{cast_id}
+***Rest API: To fetch a list of all titles of a genre where a person is in a particular role/category (i.e director or actor, etc..)***
 
-TODO:
+eg. lists/drama/Action/director/12345
 
-12345 directed any actions titles?
-    lists/action/?director=12345
+---
+###lists/type/{type}/{role}/{cast_id}
+***Rest API: To fetch a list of all titles of a type where a person is in a particular role/category (i.e director or actor, etc..)***
 
-12345 in any actions titles?
-    lists/action/?actor=12345
+eg. lists/drama/tvSeries/actor/12345
 
+---
+###lists/cast/{cast_id}
+*** Rest API: All titles a particular person has a role in***
+
+---
