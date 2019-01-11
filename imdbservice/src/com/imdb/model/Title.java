@@ -2,7 +2,7 @@ package com.imdb.model;
 
 import java.util.HashMap;
 
-public class Title implements ImDBBaseEntity {
+public class Title implements IMDBBaseEntity {
 
 
     public Title(String id, String genres) {

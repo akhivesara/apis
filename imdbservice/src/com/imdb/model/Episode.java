@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 //data model?
 // inherit base class?
-public class Episode implements ImDBBaseEntity {
+public class Episode implements IMDBBaseEntity {
 
     public String getId() {
         return id;

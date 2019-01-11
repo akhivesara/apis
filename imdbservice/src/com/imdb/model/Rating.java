@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 //data model?
 // inherit base class?
-public class Rating implements ImDBBaseEntity {
+public class Rating implements IMDBBaseEntity {
 
     public Rating(String titleId, double averageRating, int totalVotes) {
         this.titleId = titleId;

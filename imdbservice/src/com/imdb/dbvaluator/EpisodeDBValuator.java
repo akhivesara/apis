@@ -1,7 +1,7 @@
 package com.imdb.dbvaluator;
 
+import com.imdb.model.IMDBBaseEntity;
 import com.imdb.util.ImdbUtils;
-import com.imdb.model.ImDBBaseEntity;
 import com.imdb.model.Episode;
 
 import java.sql.Types;
@@ -35,12 +35,12 @@ public class EpisodeDBValuator extends AbstractDBValuator {
     }
 
     @Override
-    public Boolean isValid(ImDBBaseEntity entity) {
+    public Boolean isValid(IMDBBaseEntity entity) {
         return entity !=null;
     }
 
     @Override
-    public ArrayList valuesPerEntity(ImDBBaseEntity entity) {
+    public ArrayList valuesPerEntity(IMDBBaseEntity entity) {
         ArrayList v = new ArrayList();
         Episode episode = (Episode) entity;
         v.add(episode.getId());

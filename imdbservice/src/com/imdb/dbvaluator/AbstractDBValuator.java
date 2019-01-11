@@ -1,7 +1,7 @@
 package com.imdb.dbvaluator;
 
 import com.imdb.databaseimpl.MySQLStore;
-import com.imdb.model.ImDBBaseEntity;
+import com.imdb.model.IMDBBaseEntity;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,18 +39,18 @@ public abstract class AbstractDBValuator {
     /**
      * Called to populate the database table. It should return
      * an arraylist with values in the same order as {@link #getColumnsString()}
-     * @param entity    ImDBBaseEntity object
+     * @param entity    IMDBBaseEntity object
      * @return
      */
-    abstract public ArrayList valuesPerEntity(ImDBBaseEntity entity);
+    abstract public ArrayList valuesPerEntity(IMDBBaseEntity entity);
 
     /**
      * Called when data is retrieved from the database table.
      * @param rs    ResultSet
-     * @return      ImDBBaseEntity object
+     * @return      IMDBBaseEntity object
      * @throws SQLException     If the ResultSet does not contain the data
      */
-    public ImDBBaseEntity entityPerResultSet(ResultSet rs) throws SQLException {
+    public IMDBBaseEntity entityPerResultSet(ResultSet rs) throws SQLException {
         return null;
     };
 
@@ -68,7 +68,7 @@ public abstract class AbstractDBValuator {
      * @param entity
      * @return      boolean
      */
-    public Boolean isValid(ImDBBaseEntity entity) {
+    public Boolean isValid(IMDBBaseEntity entity) {
         return entity !=null;
     }
 
@@ -103,12 +103,12 @@ public abstract class AbstractDBValuator {
 
     /**
      * Called to populate database table. Specific IDBValuators need to implement
-     * {@link #valuesPerEntity(ImDBBaseEntity)}
+     * {@link #valuesPerEntity(IMDBBaseEntity)}
      * @param entity
      * @return      2 dimensional arraylist
      * @throws Exception
      */
-    public final ArrayList<ArrayList> populate(ImDBBaseEntity entity) throws Exception {
+    public final ArrayList<ArrayList> populate(IMDBBaseEntity entity) throws Exception {
         validator();
         ArrayList<ArrayList> returnVal = new ArrayList<>(0);
         ArrayList vals = valuesPerEntity(entity);
@@ -130,7 +130,7 @@ public abstract class AbstractDBValuator {
      * @return
      * @throws Exception
      */
-    public final ImDBBaseEntity retrieve(ResultSet rs) throws Exception {
+    public final IMDBBaseEntity retrieve(ResultSet rs) throws Exception {
         return entityPerResultSet(rs);
     }
 

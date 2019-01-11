@@ -1,10 +1,10 @@
 package com.imdb.model.credits;
 
-import com.imdb.model.ImDBBaseEntity;
+import com.imdb.model.IMDBBaseEntity;
 
 import java.util.HashMap;
 
-public class Unknown extends APersonCategory implements ImDBBaseEntity {
+public class Unknown extends APersonCategory implements IMDBBaseEntity {
 
     public Unknown(String id) {
         super(id);

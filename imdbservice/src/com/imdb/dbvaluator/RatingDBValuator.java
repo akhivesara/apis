@@ -1,6 +1,6 @@
 package com.imdb.dbvaluator;
 
-import com.imdb.model.ImDBBaseEntity;
+import com.imdb.model.IMDBBaseEntity;
 import com.imdb.model.Rating;
 import com.imdb.util.ImdbUtils;
 
@@ -36,12 +36,12 @@ public class RatingDBValuator extends AbstractDBValuator {
     }
 
     @Override
-    public Boolean isValid(ImDBBaseEntity entity) {
+    public Boolean isValid(IMDBBaseEntity entity) {
         return entity !=null;
     }
 
     @Override
-    public ArrayList valuesPerEntity(ImDBBaseEntity entity) {
+    public ArrayList valuesPerEntity(IMDBBaseEntity entity) {
         ArrayList v = new ArrayList();
         Rating rating = (Rating) entity;
         v.add(rating.getTitleId());
@@ -52,7 +52,7 @@ public class RatingDBValuator extends AbstractDBValuator {
     }
 
     @Override
-    public ImDBBaseEntity entityPerResultSet(ResultSet rs) throws SQLException {
+    public IMDBBaseEntity entityPerResultSet(ResultSet rs) throws SQLException {
         String tconst = rs.getString("tconst");
         Double rating = rs.getDouble("averageRating");
         Integer votes = rs.getInt("numVotes");

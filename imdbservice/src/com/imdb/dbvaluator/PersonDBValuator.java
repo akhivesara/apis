@@ -1,6 +1,6 @@
 package com.imdb.dbvaluator;
 
-import com.imdb.model.ImDBBaseEntity;
+import com.imdb.model.IMDBBaseEntity;
 import com.imdb.model.credits.Person;
 import com.imdb.util.ImdbUtils;
 
@@ -36,12 +36,12 @@ public class PersonDBValuator extends AbstractDBValuator {
     }
 
     @Override
-    public Boolean isValid(ImDBBaseEntity entity) {
+    public Boolean isValid(IMDBBaseEntity entity) {
         return entity !=null;
     }
 
     @Override
-    public ArrayList valuesPerEntity(ImDBBaseEntity entity) {
+    public ArrayList valuesPerEntity(IMDBBaseEntity entity) {
         ArrayList v = new ArrayList();
         Person title = (Person) entity;
         v.add(title.getId());

@@ -2,7 +2,7 @@ package com.imdb.dbvaluator;
 
 import com.imdb.model.credits.Director;
 import com.imdb.util.ImdbUtils;
-import com.imdb.model.ImDBBaseEntity;
+import com.imdb.model.IMDBBaseEntity;
 
 import java.sql.Types;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class DirectorDBValuator extends AbstractDBValuator {
     }
 
     @Override
-    public Boolean isValid(ImDBBaseEntity entity) {
+    public Boolean isValid(IMDBBaseEntity entity) {
         return entity !=null && ((Director)entity).getId() != null;
     }
 
@@ -40,7 +40,7 @@ public class DirectorDBValuator extends AbstractDBValuator {
     }
 
     @Override
-    public ArrayList valuesPerEntity(ImDBBaseEntity entity) {
+    public ArrayList valuesPerEntity(IMDBBaseEntity entity) {
         ArrayList v = new ArrayList();
         Director director = (Director) entity;
         v.add(director.getTitleId());

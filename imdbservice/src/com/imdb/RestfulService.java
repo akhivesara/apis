@@ -3,7 +3,7 @@ package com.imdb;
 
 import com.google.gson.Gson;
 import com.imdb.model.credits.PersonCategory;
-import com.imdb.model.ImDBBaseEntity;
+import com.imdb.model.IMDBBaseEntity;
 import com.imdb.model.Rating;
 import com.imdb.model.Title;
 import com.imdb.model.credits.Person;
@@ -86,7 +86,7 @@ public class RestfulService {
     @Path("title/cast/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response castDetails(@PathParam("id") String input) {
-        ArrayList<ImDBBaseEntity> titles = IMDBService.getInstance().retrieveCastById(input);
+        ArrayList<IMDBBaseEntity> titles = IMDBService.getInstance().retrieveCastById(input);
         HashMap attributes = new HashMap();
         attributes.put("listsKey", "cast");
         String employeeJsonString = new Gson().toJson(ResponseUtil.listDecorator(titles, attributes));
@@ -121,7 +121,7 @@ public class RestfulService {
     @Path("lists/adultTitles")
     @Produces(MediaType.APPLICATION_JSON)
     public Response adult(@QueryParam("limit") String limit, @QueryParam("offset") String offset) {
-        ArrayList<ImDBBaseEntity> titles = IMDBService.getInstance().retrieveAdultTitles(limit, offset);
+        ArrayList<IMDBBaseEntity> titles = IMDBService.getInstance().retrieveAdultTitles(limit, offset);
         HashMap attributes;
         attributes = new HashMap<String, Object>();
         attributes.put("adult", true);

@@ -3,7 +3,7 @@ package com.imdb;
 import com.imdb.databaseimpl.MySQLStore;
 import com.imdb.dbvaluator.*;
 import com.imdb.model.Episode;
-import com.imdb.model.ImDBBaseEntity;
+import com.imdb.model.IMDBBaseEntity;
 import com.imdb.model.Rating;
 import com.imdb.model.Title;
 import com.imdb.model.credits.*;
@@ -48,7 +48,7 @@ public class IMDBService {
             2. save file
             3. populate db
          */
-        ArrayList<ImDBBaseEntity> ratings = fetchAndSaveByIdentifierAndClass(ImdbUtils.RATINGS_IDENTIFIER, Rating.class);
+        ArrayList<IMDBBaseEntity> ratings = fetchAndSaveByIdentifierAndClass(ImdbUtils.RATINGS_IDENTIFIER, Rating.class);
         try {
             getMySQLStore().populateUsingBatchInsert(ratings, 0, new RatingDBValuator());
         } catch (Exception e) {
@@ -62,7 +62,7 @@ public class IMDBService {
             2. save file
             3. populate db
          */
-        ArrayList<ImDBBaseEntity> episodes = fetchAndSaveByIdentifierAndClass(ImdbUtils.EPISODES_IDENTIFIER, Episode.class);
+        ArrayList<IMDBBaseEntity> episodes = fetchAndSaveByIdentifierAndClass(ImdbUtils.EPISODES_IDENTIFIER, Episode.class);
         try {
             getMySQLStore().populateUsingBatchInsert(episodes, 0, new EpisodeDBValuator());
         } catch (Exception e) {
@@ -70,7 +70,7 @@ public class IMDBService {
         }
     }
 
-    public ArrayList<ImDBBaseEntity> fetchAndSaveByIdentifierAndClass(String identifier, Class type) {
+    public ArrayList<IMDBBaseEntity> fetchAndSaveByIdentifierAndClass(String identifier, Class type) {
         /*
             1. Download file/s
             2. save file
@@ -81,7 +81,7 @@ public class IMDBService {
     }
 
     public void fetchAndSavePersons() {
-        ArrayList<ImDBBaseEntity>  persons = fetchAndSaveByIdentifierAndClass(ImdbUtils.PERSON_IDENTIFIER, Person.class);
+        ArrayList<IMDBBaseEntity>  persons = fetchAndSaveByIdentifierAndClass(ImdbUtils.PERSON_IDENTIFIER, Person.class);
         try {
             getMySQLStore().populateUsingBatchInsert(persons, 0, new PersonDBValuator());
         } catch (Exception e) {
@@ -90,7 +90,7 @@ public class IMDBService {
     }
 
     public void fetchAndSaveTitles() {
-        ArrayList<ImDBBaseEntity>  titles = fetchAndSaveByIdentifierAndClass(ImdbUtils.TITLE_IDENTIFIER, Title.class);
+        ArrayList<IMDBBaseEntity>  titles = fetchAndSaveByIdentifierAndClass(ImdbUtils.TITLE_IDENTIFIER, Title.class);
         try {
             getMySQLStore().populateUsingBatchInsert(titles, 0, new TitleDBValuator());
         } catch (Exception e) {
@@ -104,7 +104,7 @@ public class IMDBService {
 
     public void fetchAndSaveGenres() {
         System.out.println("fetchAndSaveGenres");
-        ArrayList<ImDBBaseEntity>  titles = fetchAndSaveByIdentifierAndClass(ImdbUtils.TITLE_IDENTIFIER, Title.class);
+        ArrayList<IMDBBaseEntity>  titles = fetchAndSaveByIdentifierAndClass(ImdbUtils.TITLE_IDENTIFIER, Title.class);
         try {
             getMySQLStore().populateUsingBatchInsert(titles, 0, new GenreDBValuator());
         } catch (Exception e) {
@@ -132,13 +132,13 @@ public class IMDBService {
 
     private void fetchAndSaveDirectorOrWriter(AbstractDBValuator valuator, Class type) {
         System.out.println("fetchAndSaveDirectorOrWriter");
-        ArrayList<ImDBBaseEntity>  crew = fetchAndSaveByIdentifierAndClass(ImdbUtils.TITLE_CREW_IDENTIFIER, type);
+        ArrayList<IMDBBaseEntity>  crew = fetchAndSaveByIdentifierAndClass(ImdbUtils.TITLE_CREW_IDENTIFIER, type);
         getMySQLStore().populateUsingBatchInsert(crew, 0, valuator);
     }
 
     private void fetchAndSaveCastImpl(String []tableNames, String identifier) {
         System.out.println("fetchAndSaveCastImpl");
-        ArrayList<ImDBBaseEntity>  entities = fetchAndSaveByIdentifierAndClass(identifier, APersonCategory.class);
+        ArrayList<IMDBBaseEntity>  entities = fetchAndSaveByIdentifierAndClass(identifier, APersonCategory.class);
         if (entities != null && entities.size() > 0) {
             try {
                 getMySQLStore().populateUsingBatchInsert(entities, 0, new PersonCategoryDBValuator());
@@ -148,7 +148,7 @@ public class IMDBService {
         }
     }
 
-    private static ArrayList<ImDBBaseEntity> readLinesAndStoreInClassType(String filePath, Class type) {
+    private static ArrayList<IMDBBaseEntity> readLinesAndStoreInClassType(String filePath, Class type) {
         try{
             System.out.println("Start Reading lines for "+filePath);
             BufferedReader buf = new BufferedReader(new FileReader(filePath));
@@ -158,7 +158,7 @@ public class IMDBService {
             HashMap<String, String> lineMap;
             HashMap<String, String> commaValueLineMap;
             String[] commaValues = new String[] {};
-            ArrayList<ImDBBaseEntity> dataListIMDBObject = new ArrayList<>();
+            ArrayList<IMDBBaseEntity> dataListIMDBObject = new ArrayList<>();
 
             Constructor<?> cons = type.getConstructor(HashMap.class);
             Object object;
@@ -215,7 +215,7 @@ public class IMDBService {
 //                                Constructor<?> cons = type.getConstructor(HashMap.class);
                                 object = cons.newInstance(commaValueLineMap);
 
-                                dataListIMDBObject.add((ImDBBaseEntity)object);
+                                dataListIMDBObject.add((IMDBBaseEntity)object);
 
 
                             }
@@ -236,10 +236,10 @@ public class IMDBService {
                         Constructor<?> resolvedCons = resolvedClass.getConstructor(HashMap.class);
                         object = resolvedCons.newInstance(lineMap);
 
-                        dataListIMDBObject.add((ImDBBaseEntity) object);
+                        dataListIMDBObject.add((IMDBBaseEntity) object);
                     } else if (commaValues.length <= 1 && lineMap.keySet().size() > 1) {
                         object = cons.newInstance(lineMap);
-                        dataListIMDBObject.add((ImDBBaseEntity) object);
+                        dataListIMDBObject.add((IMDBBaseEntity) object);
                     }
                 }
             }
@@ -277,11 +277,11 @@ public class IMDBService {
         return getMySQLStore().calculateAllTitlesRating(new RatingDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
     }
 
-    public ArrayList<ImDBBaseEntity> retrieveCastById(String id) {
+    public ArrayList<IMDBBaseEntity> retrieveCastById(String id) {
         return getMySQLStore().retrieveCastById(id, new PersonCategoryDBValuator());
     }
 
-    public ArrayList<ImDBBaseEntity> retrieveAdultTitles(String limit, String offset) {
+    public ArrayList<IMDBBaseEntity> retrieveAdultTitles(String limit, String offset) {
         String whereClause = "WHERE isAdult"+"='"+1+"'";
         String orderByClause = "ORDER BY title";
         return getMySQLStore().retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
@@ -290,35 +290,35 @@ public class IMDBService {
     public ArrayList<HashMap> retrieveListOfTitlesByType(String type, String limit, String offset) {
         String whereClause = "WHERE "+ "titleType"+"='"+type+"'";
         String orderByClause = "ORDER BY title";
-        ArrayList<ImDBBaseEntity> lists = getMySQLStore().retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        ArrayList<IMDBBaseEntity> lists = getMySQLStore().retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
         return convertToKeys(lists, new String[]{"id"});
     }
 
     public ArrayList<HashMap> retrieveListOfTitlesByGenre(String genre, String limit, String offset) {
         String whereClause = "WHERE "+ "genre" + "='"+genre+"'";
-        ArrayList<ImDBBaseEntity> lists = getMySQLStore().retrieveListOfTitles(whereClause, null, new GenreDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        ArrayList<IMDBBaseEntity> lists = getMySQLStore().retrieveListOfTitles(whereClause, null, new GenreDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
         return convertToKeys(lists, new String[]{"id"});
     }
 
     public ArrayList<HashMap> retrieveListOfTitlesByName(String query, String limit, String offset) {
         String whereClause = "WHERE "+ "title" + " LIKE '% "+query+"%'";
         String orderByClause = "ORDER BY title";
-        ArrayList<ImDBBaseEntity> lists = getMySQLStore().retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        ArrayList<IMDBBaseEntity> lists = getMySQLStore().retrieveListOfTitles(whereClause, orderByClause, new TitleDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
         return convertToKeys(lists, new String[]{"id", "title"});
     }
 
     public ArrayList<HashMap> retrieveListOfPeopleByName(String query, String limit, String offset) {
         String whereClause = "WHERE "+ "primaryName" + " LIKE '% "+query+"%'";
         String orderByClause = "ORDER BY primaryName";
-        ArrayList<ImDBBaseEntity> lists = getMySQLStore().retrieveListOfTitles(whereClause, orderByClause, new PersonDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
+        ArrayList<IMDBBaseEntity> lists = getMySQLStore().retrieveListOfTitles(whereClause, orderByClause, new PersonDBValuator(), limit != null ? Integer.valueOf(limit) : null, offset != null ? Integer.valueOf(offset) : null);
         return convertToKeys(lists, new String[]{"id", "name"});
     }
 
-    private ArrayList<HashMap> convertToKeys(ArrayList<ImDBBaseEntity> entities, String[] keys) {
+    private ArrayList<HashMap> convertToKeys(ArrayList<IMDBBaseEntity> entities, String[] keys) {
         ArrayList<HashMap> returnList = new ArrayList<>(entities.size());
         for (int i=0; i < entities.size() ; i++) {
             HashMap value = new HashMap(2);
-            ImDBBaseEntity title = entities.get(i);
+            IMDBBaseEntity title = entities.get(i);
 
             for (int k=0; k < keys.length; k++) {
                 try {
@@ -346,7 +346,7 @@ CREW LOGIC
 
     private void fetchAndSaveCrewImpl(String []tableNames, String identifier) {
         System.out.println("fetchAndSaveCrewImpl");
-        ArrayList<ImDBBaseEntity>  crew = fetchAndSaveByIdentifierAndClass(identifier, APersonCategory.class);
+        ArrayList<IMDBBaseEntity>  crew = fetchAndSaveByIdentifierAndClass(identifier, APersonCategory.class);
 
         MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         db.crewBatchInsert(tableNames, crew);
@@ -354,7 +354,7 @@ CREW LOGIC
 
     private void fetchAndSaveCrewImplX(AbstractDBValuator crewValuator, String identifier) {
         System.out.println("fetchAndSaveCrewImplX");
-        ArrayList<ImDBBaseEntity>  crew = fetchAndSaveByIdentifierAndClass(identifier, APersonCategory.class);
+        ArrayList<IMDBBaseEntity>  crew = fetchAndSaveByIdentifierAndClass(identifier, APersonCategory.class);
 
         MySQLStore db = MySQLStore.getInstance(LOCAL_DB_PATH, LOCAL_DB_USER, LOCAL_DB_PWD);
         db.pseudoBatchInsert(crew, 0, crewValuator);

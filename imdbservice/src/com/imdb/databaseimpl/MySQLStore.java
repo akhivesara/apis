@@ -1,8 +1,8 @@
 package com.imdb.databaseimpl;
 
 import com.imdb.dbvaluator.AbstractDBValuator;
+import com.imdb.model.IMDBBaseEntity;
 import com.imdb.util.ImdbUtils;
-import com.imdb.model.ImDBBaseEntity;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -31,7 +31,7 @@ public class MySQLStore {
         return new MySQLStore(url, user, pwd);
     }
 
-    public void populateUsingBatchInsert(ArrayList<ImDBBaseEntity> dbBaseEntities, int startIndex, AbstractDBValuator valuator) {
+    public void populateUsingBatchInsert(ArrayList<IMDBBaseEntity> dbBaseEntities, int startIndex, AbstractDBValuator valuator) {
 
         String tableName = valuator.getDBTable();
         System.out.println(" Start-- populateUsingBatchInsert for : "+tableName);
@@ -48,7 +48,7 @@ public class MySQLStore {
         }
 
         Connection connection = null;
-        ImDBBaseEntity dbBaseEntity = null;
+        IMDBBaseEntity dbBaseEntity = null;
         PreparedStatement ps = null;
         final int batchSize = 1;
         int count = 0;
@@ -176,56 +176,20 @@ public class MySQLStore {
 
     }
 
-    // TODO: Consider checking a faster way to know is a table is populated
-    public boolean isTableEmpty(String tableName) {
-        Connection conn;
-        Statement stmt;
-
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-
-            //STEP 3: Open a connection
-            System.out.println("Connecting to a selected database...");
-            conn = DriverManager.getConnection(url, user, pwd);
-            System.out.println("Connected database successfully...");
-
-            //STEP 4: Execute a query
-            stmt = conn.createStatement();
-
-            String sql = "SELECT * FROM " + tableName;
-
-            ResultSet rs = stmt.executeQuery(sql);
-
-            if (!rs.next()) {
-                return true;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return false;
-    }
-
-
-
-
-
     /*
       // CREW LOGIC
-    public void crewBatchInsert(String[] tableNames, ArrayList<ImDBBaseEntity> crew) {
+    public void crewBatchInsert(String[] tableNames, ArrayList<IMDBBaseEntity> crew) {
         for (String tableName: tableNames) {
             insertCrewTypeWithErrorHandler(tableName, crew, 0);
         }
     }
 
-    public void insertCrewTypeWithErrorHandlerX(AbstractDBValuator crewValuator, ArrayList<ImDBBaseEntity> crew, int startCount) {
+    public void insertCrewTypeWithErrorHandlerX(AbstractDBValuator crewValuator, ArrayList<IMDBBaseEntity> crew, int startCount) {
         pseudoBatchInsert(crew, startCount, crewValuator);
     }
 
     // recursive error handler
-    private void insertCrewTypeWithErrorHandler(String tableName, ArrayList<ImDBBaseEntity> crew, int startCount) {
+    private void insertCrewTypeWithErrorHandler(String tableName, ArrayList<IMDBBaseEntity> crew, int startCount) {
         //try {
         Connection connection = null;
         Crew cr = null;
@@ -297,9 +261,9 @@ public class MySQLStore {
     }
     */
 
-    public ArrayList<ImDBBaseEntity> retrieveCastById(String id, AbstractDBValuator dbValuator) {
+    public ArrayList<IMDBBaseEntity> retrieveCastById(String id, AbstractDBValuator dbValuator) {
 
-        ArrayList<ImDBBaseEntity> data = new ArrayList<>(0);
+        ArrayList<IMDBBaseEntity> data = new ArrayList<>(0);
         Connection connection = null;
         ResultSet rs = null;
         try {
@@ -332,7 +296,7 @@ public class MySQLStore {
         return data;
     }
 
-    public ImDBBaseEntity retrieveFromTableById(String id, AbstractDBValuator dbValuator) {
+    public IMDBBaseEntity retrieveFromTableById(String id, AbstractDBValuator dbValuator) {
         Connection connection = null;
         ResultSet rs = null;
         try {
@@ -362,7 +326,7 @@ public class MySQLStore {
         return null;
     }
 
-    public ArrayList<ImDBBaseEntity> retrieveListOfTitles(String whereClause, String orderByClause, AbstractDBValuator dbValuator, Integer limit, Integer offset) {
+    public ArrayList<IMDBBaseEntity> retrieveListOfTitles(String whereClause, String orderByClause, AbstractDBValuator dbValuator, Integer limit, Integer offset) {
         Connection connection = null;
         ResultSet rs = null;
         try {
@@ -389,10 +353,10 @@ public class MySQLStore {
             rs = st.executeQuery(sql);
 
             // iterate through the java resultset
-            ArrayList<ImDBBaseEntity> l = new ArrayList<>(0);
+            ArrayList<IMDBBaseEntity> l = new ArrayList<>(0);
 
             while (rs.next()) {
-                ImDBBaseEntity title = dbValuator.retrieve(rs);
+                IMDBBaseEntity title = dbValuator.retrieve(rs);
                 l.add(title);
             }
             st.close();

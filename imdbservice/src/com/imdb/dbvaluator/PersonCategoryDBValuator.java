@@ -1,8 +1,8 @@
 package com.imdb.dbvaluator;
 
+import com.imdb.model.IMDBBaseEntity;
 import com.imdb.model.credits.APersonCategory;
 import com.imdb.util.ImdbUtils;
-import com.imdb.model.ImDBBaseEntity;
 import com.imdb.model.credits.PersonCategory;
 
 import java.lang.reflect.Constructor;
@@ -39,12 +39,12 @@ public class PersonCategoryDBValuator extends AbstractDBValuator {
     }
 
     @Override
-    public Boolean isValid(ImDBBaseEntity entity) {
+    public Boolean isValid(IMDBBaseEntity entity) {
         return entity !=null && ((APersonCategory)entity).getCategory() != null;
     }
 
     @Override
-    public ArrayList valuesPerEntity(ImDBBaseEntity entity) {
+    public ArrayList valuesPerEntity(IMDBBaseEntity entity) {
         ArrayList v = new ArrayList();
         APersonCategory title = (APersonCategory) entity;
         v.add(title.getTitleId());
@@ -55,8 +55,8 @@ public class PersonCategoryDBValuator extends AbstractDBValuator {
     }
 
     @Override
-    public ImDBBaseEntity entityPerResultSet(ResultSet rs) throws SQLException {
-        ImDBBaseEntity object = null;
+    public IMDBBaseEntity entityPerResultSet(ResultSet rs) throws SQLException {
+        IMDBBaseEntity object = null;
         Class resolvedClass = PersonCategory.findClassByPersonCategory(PersonCategory.findByCategory(rs.getString("category")));
         HashMap i = new HashMap();
         i.put("tconst", rs.getString("tconst"));

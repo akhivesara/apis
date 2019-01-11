@@ -1,8 +1,8 @@
 package com.imdb.dbvaluator;
 
+import com.imdb.model.IMDBBaseEntity;
 import com.imdb.model.credits.Writer;
 import com.imdb.util.ImdbUtils;
-import com.imdb.model.ImDBBaseEntity;
 
 import java.sql.Types;
 import java.util.ArrayList;
@@ -34,12 +34,12 @@ public class WriterDBValuator extends AbstractDBValuator {
     }
 
     @Override
-    public Boolean isValid(ImDBBaseEntity entity) {
+    public Boolean isValid(IMDBBaseEntity entity) {
         return entity !=null && ((Writer)entity).getId() != null;
     }
 
     @Override
-    public ArrayList valuesPerEntity(ImDBBaseEntity entity) {
+    public ArrayList valuesPerEntity(IMDBBaseEntity entity) {
         ArrayList v = new ArrayList();
         Writer writer = (Writer) entity;
         v.add(writer.getTitleId());

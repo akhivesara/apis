@@ -1,7 +1,7 @@
 package com.imdb.dbvaluator;
 
 import com.imdb.util.ImdbUtils;
-import com.imdb.model.ImDBBaseEntity;
+import com.imdb.model.IMDBBaseEntity;
 import com.imdb.model.Title;
 
 import java.sql.ResultSet;
@@ -36,12 +36,12 @@ public class GenreDBValuator extends AbstractDBValuator {
     }
 
     @Override
-    public Boolean isValid(ImDBBaseEntity entity) {
+    public Boolean isValid(IMDBBaseEntity entity) {
         return entity !=null;
     }
 
     @Override
-    public ArrayList<ArrayList> valuesPerEntity(ImDBBaseEntity entity) {
+    public ArrayList<ArrayList> valuesPerEntity(IMDBBaseEntity entity) {
         ArrayList p = new ArrayList();
         Title title = (Title) entity;
         String titleGenres = title.getGenres();
@@ -57,7 +57,7 @@ public class GenreDBValuator extends AbstractDBValuator {
     }
 
     @Override
-    public ImDBBaseEntity entityPerResultSet(ResultSet rs) throws SQLException {
+    public IMDBBaseEntity entityPerResultSet(ResultSet rs) throws SQLException {
         String tconst = rs.getString("tconst");
         String genre = rs.getString("genre");
         return new Title(tconst, genre);

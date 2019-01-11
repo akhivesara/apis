@@ -1,10 +1,10 @@
 package com.imdb.model.credits;
 
-import com.imdb.model.ImDBBaseEntity;
+import com.imdb.model.IMDBBaseEntity;
 
 import java.util.HashMap;
 
-public class Crew implements ImDBBaseEntity  {
+public class Crew implements IMDBBaseEntity {
 
     public Director getDirector() {
         return director;

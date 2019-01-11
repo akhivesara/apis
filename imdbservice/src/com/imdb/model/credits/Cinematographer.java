@@ -1,11 +1,11 @@
 package com.imdb.model.credits;
 
 
-import com.imdb.model.ImDBBaseEntity;
+import com.imdb.model.IMDBBaseEntity;
 
 import java.util.HashMap;
 
-public class Cinematographer extends APersonCategory implements ImDBBaseEntity {
+public class Cinematographer extends APersonCategory implements IMDBBaseEntity {
 
     public Cinematographer(String id) {
         super(id);

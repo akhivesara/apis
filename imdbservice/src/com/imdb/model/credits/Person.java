@@ -1,10 +1,10 @@
 package com.imdb.model.credits;
 
-import com.imdb.model.ImDBBaseEntity;
+import com.imdb.model.IMDBBaseEntity;
 
 import java.util.HashMap;
 
-public class Person implements ImDBBaseEntity {
+public class Person implements IMDBBaseEntity {
 
     public void setName(String name) {
         this.name = name;
