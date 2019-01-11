@@ -16,7 +16,7 @@
 10. If you are running into errors in Step 9, you have 2 options
     1. Keep running the above command but to speed up,  do individual files, i.e either title, person, 
        episode, rating, genre, cast -by running: `java -Xms1024m -Xmx4096m -cp "imdbservice.jar:lib/*" com.imdb.DataUpdatingTool cast`
-    2. Import database with data. Follow steps 2 & 3, but used  `init_database_with_data.sql` instead            
+    2. Import database with data. Follow steps 2 & 3, but used  `init_database_with_data.sql` instead. Find it here [link](https://drive.google.com/drive/u/0/folders/1jiVNJaux7YASfHcH8ckyEeOebcMNnKjW)            
 11. To run the rest server: `java -cp "imdbservice.jar:lib/*" com.imdb.MainService`
 12. You can now run try all of the below APIs
 
@@ -57,18 +57,23 @@
 ---
 ### lists/titles/adultTitles
 ***Rest API: To fetch a list of all adult titles on the service.***
+##### Try : [Adult](http://localhost:8080/nflxstudio/lists/titles/adultTitles)
 
 ---
 ### lists/titles/type/{type}
 ***Rest API: To fetch a list of all titles of type. Possible values { short |movie |tvMovie |tvSeries |tvEpisode |tvShort |tvMiniSeries |tvSpecial |video |videoGame }***
+##### Try : [tvSeries](http://localhost:8080/nflxstudio/lists/titles/type/tvSeries?limit=10&offset=0)
 
 ---
 ### lists/titles/genre/{genre}
 ***Rest API: To fetch a list of all titles of specified genre. Possible values for genre are { Documentary |Short |Animation |Comedy |Romance |Sport |News |Drama |Fantasy |Horror |Biography |Music |War |Crime |Western |Family |Adventure |History |Sci-Fi |Action |Mystery |Thriller |Musical |Film-Noir |Game-Show |Talk-Show |Reality-TV |Adult }***
+##### Try : [Drama](http://localhost:8080/nflxstudio/lists/titles/genre/Drama?limit=10&offset=0)
 
 ---
 ### search/{query}
 ***Rest API: Search. Currently Supports Title and People. Implementation performs partial word match provided word begins with the query. Support filtering by query param type. if type=person returns only people, if type=title returns only title. default if no type returns both. limit: page size for pagination support. default is set at 100. offset: offset for pagination support***
+##### Try : [Brad](http://localhost:8080/nflxstudio/search/brad?limit=10)
+
 
     "search": "brad",
     "title": {list:[...], ...},
@@ -79,10 +84,11 @@
 
 ### lists/titles/calculatedratings
 ***Rest API: To fetch a list of ratings for all titles that includes both ratings re-calculated and old ratings. Re-calculation Algorithm used is: average of all episode ratings for that show***
+##### Try : [New Ratings](http://localhost:8080/nflxstudio/lists/titles/calculatedratings?limit=10)
 
 
 ---
-### Future Work 
+### Future Work (due to time constraint) 
 
 #### 1. API To Build:
 
