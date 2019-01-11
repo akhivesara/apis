@@ -86,8 +86,11 @@
 ***Rest API: To fetch a list of ratings for all titles that includes both ratings re-calculated and old ratings. Re-calculation Algorithm used is: average of all episode ratings for that show***
 ##### Try : [New Ratings](http://localhost:8080/nflxstudio/lists/titles/calculatedratings?limit=10)
 
-
 ---
+
+# Java Docs
+[Docs](docs/index.html)
+
 ### Future Work (due to time constraint) 
 
 #### 1. API To Build:
