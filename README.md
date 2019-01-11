@@ -130,4 +130,5 @@ Now in theory, IMDBService can be instantiated by any other database implementat
 #### 6. Optimized for Memory, CPU constraints during reading and populating database 
 
 #### 7. Database performance leading to delay in API response times 
-     
+
+#### 8. Move business logic for ratings should be outside the MySQLStore, along with some cleanup
