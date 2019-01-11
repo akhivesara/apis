@@ -101,7 +101,8 @@ public class DataUpdatingTool {
         }
 
         if (tables.size() > 0) {
-            MySQLStore db = MySQLStore.getInstance("jdbc:mysql://localhost/nflxtakehome", "nflxtakehome", "nflxtakehome");
+            IMDBConfig config = IMDBConfig.getInstance();
+            MySQLStore db = MySQLStore.getInstance(config.getValue(IMDBConfig.IMDBConfigKeys.DB_PATH), config.getValue(IMDBConfig.IMDBConfigKeys.DB_USER), config.getValue(IMDBConfig.IMDBConfigKeys.DB_PASSWORD));
             for (String table : tables) {
                 db.delete(table);
             }

@@ -1,6 +1,6 @@
 package com.imdb.dbvaluator;
 
-import com.imdb.databaseimpl.MySQLStore;
+
 import com.imdb.model.IMDBBaseEntity;
 
 import java.sql.ResultSet;
@@ -14,7 +14,7 @@ import java.util.List;
  * If say TITLE DB table needs to be populated. It will require a
  * corresponding, say {@link TitleDBValuator}
  * Populate operation is performed by
- * {@link MySQLStore#populateUsingBatchInsert(ArrayList, int, AbstractDBValuator)}
+ * @see MySQLStore#populateUsingBatchInsert(...)
  * Retrieval operatrion is performed by
  * {@link MySQLStore} as well
  */

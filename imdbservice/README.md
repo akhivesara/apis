@@ -36,19 +36,19 @@ TODO: Write a bash script that creates and populates the database
 
 ---
 
-### lists/calculatedRatings
+### lists/titles/calculatedratings
 ***Rest API: To fetch a list of ratings for all titles that includes both ratings re-calculated and old ratings. Re-calculation Algorithm used is: average of all episode ratings for that show***
 
 ---
-### lists/adultTitles
+### lists/titles/adultTitles
 ***Rest API: To fetch a list of all adult titles on the service.***
 
 ---
-### lists/type/{type}
+### lists/titles/type/{type}
 ***Rest API: To fetch a list of all titles of type. Possible values { short |movie |tvMovie |tvSeries |tvEpisode |tvShort |tvMiniSeries |tvSpecial |video |videoGame }***
 
 ---
-### lists/genre/{genre}
+### lists/titles/genre/{genre}
 ***Rest API: To fetch a list of all titles of specified genre. Possible values for genre are { Documentary |Short |Animation |Comedy |Romance |Sport |News |Drama |Fantasy |Horror |Biography |Music |War |Crime |Western |Family |Adventure |History |Sci-Fi |Action |Mystery |Thriller |Musical |Film-Noir |Game-Show |Talk-Show |Reality-TV |Adult }***
 
 ---
@@ -61,32 +61,30 @@ TODO: Write a bash script that creates and populates the database
     "timestamp": "01/07/2019 14:10:12.040"
 
 ---
-### TODO 
+### Future Work 
 
-#### 1. API STUBS:
+#### 1. API To Build:
 
-### lists/genre/{genre}/{role}/{cast_id}
-***Rest API: To fetch a list of all titles of a genre where a person is in a particular role/category (i.e director or actor, etc..)***
-
-eg. lists/drama/Action/director/12345
-
----
-### lists/type/{type}/{role}/{cast_id}
-***Rest API: To fetch a list of all titles of a type where a person is in a particular role/category (i.e director or actor, etc..)***
-
-eg. lists/drama/tvSeries/actor/12345
-
----
-### lists/cast/{cast_id}
+### lists/titles/cast/{castId}
 ***Rest API: All titles a particular person has a role in***
 
 ---
+### lists/titles/cast/role/{roleId}/{castId}
+***Rest API: All titles a particular person has played a specific role***
 
+---
 ### title/{id}/episodes
 ***Rest API: All episodes for a title***
 
 ---
+### lists/genres
+***Rest API: All Possible Genres***
 
+---
+### lists/types
+***Rest API: All Possible Types***
+
+---
 
 #### 2. Better logger using tags, log levels
 
@@ -94,4 +92,10 @@ eg. lists/drama/tvSeries/actor/12345
 
 #### 4. Bash script to create and populate db
 
-#### 5. Abstract design such that any other database can be plugged in. The idea for that support is implemented by adding Entity object (IMDBEntity) and AbstractDBValuator. So the remaining part is abstraction for MySQLStore     
+#### 5. Abstract design so that any other database can be plugged in. The idea for that support is in some way already in there, due to the Entity object (IMDBEntity) and AbstractDBValuator. So the remaining part is abstraction layer for MySQLStore. 
+Here is how it could happen
+MySQLStore will implement an IDatabaseImpl
+IDatabaseImpl will have methods to populate, retrieve, delete, close connection, so forth
+IMDBService, DataUpdatingTool will be instantiated with a IDatabaseImpl
+Now in theory, IMDBService can be instantiated by any other database implementation
+     

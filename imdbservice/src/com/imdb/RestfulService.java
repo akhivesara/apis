@@ -101,7 +101,7 @@ public class RestfulService {
      * @return
      */
     @GET
-    @Path("lists/calculatedRatings")
+    @Path("lists/titles/calculatedratings")
     @Produces(MediaType.APPLICATION_JSON)
     public Response calculatedRatings(@QueryParam("limit") String limit, @QueryParam("offset") String offset) {
         ArrayList<HashMap> list = IMDBService.getInstance().calculateAllTitlesRating(limit, offset);
@@ -118,7 +118,7 @@ public class RestfulService {
      * @return
      */
     @GET
-    @Path("lists/adultTitles")
+    @Path("lists/titles/adultTitles")
     @Produces(MediaType.APPLICATION_JSON)
     public Response adult(@QueryParam("limit") String limit, @QueryParam("offset") String offset) {
         ArrayList<IMDBBaseEntity> titles = IMDBService.getInstance().retrieveAdultTitles(limit, offset);
@@ -135,14 +135,14 @@ public class RestfulService {
      * @param {type}    title type, possible values
      * { short |movie |tvMovie |tvSeries |tvEpisode |
      *   tvShort |tvMiniSeries |tvSpecial |video |videoGame }
-     *   TODO: Make the above case-insensitive & enums. Consider possibly merging similar types ex: tvSeries, tvMiniSeries. Better have a middleware that does that merge for clients
+     *   TODO: Make the above case-insensitive. Consider possibly merging similar types ex: tvSeries, tvMiniSeries. Better have a middleware that does that merge for clients
      * @param limit     page size for pagination support
      * @param offset    offset for pagination support
      * @return
      * @return
      */
     @GET
-    @Path("lists/type/{type}")
+    @Path("lists/titles/type/{type}")
     @Produces(MediaType.APPLICATION_JSON)
 
     public Response titlesByType(@PathParam("type") String input, @QueryParam("limit") String limit, @QueryParam("offset") String offset) {
@@ -169,14 +169,14 @@ public class RestfulService {
      *   Drama |Fantasy |Horror |Biography |Music |War |Crime |Western |
      *   Family |Adventure |History |Sci-Fi |Action |Mystery |Thriller |
      *   Musical |Film-Noir |Game-Show |Talk-Show |Reality-TV |Adult }
-     *   TODO: Make the above case-insensitive & enums
+     *   TODO: Make the above case-insensitive
      * @param limit     page size for pagination support
      * @param offset    offset for pagination support
      * @return
      * @return
      */
     @GET
-    @Path("lists/genre/{genre}")
+    @Path("lists/titles/genre/{genre}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response titlesByGenre(@PathParam("genre") String input, @QueryParam("limit") String limit, @QueryParam("offset") String offset) {
         //Logger.getLogger().info();
